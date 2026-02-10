@@ -86,6 +86,8 @@ canvas#glucoseChart{display:block;width:100%;height:100%}
 .record-item:hover .record-delete{opacity:1}.record-delete:hover{color:var(--accent-red)}
 .empty-state{text-align:center;padding:2rem;color:var(--text-muted);font-size:.85rem}
 .setup-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.5);z-index:1000;display:flex;align-items:center;justify-content:center;padding:1rem}
+#permOverlay{z-index:2000}
+
 .setup-overlay.hidden{display:none}
 .setup-box{background:var(--bg-card);border:1px solid var(--border-color);border-radius:var(--radius-lg);padding:2rem;max-width:500px;width:100%;box-shadow:0 8px 32px rgba(0,0,0,.15)}
 .setup-box h2{font-size:1.1rem;font-weight:600;margin-bottom:.5rem}
@@ -135,7 +137,7 @@ canvas#glucoseChart{display:block;width:100%;height:100%}
   <div class="input-section">
     <div class="input-tabs">
       <button class="input-tab active" data-tab="glucose">血糖値</button>
-      <button class="input-tab" data-tab="insulin">インスリン</button>
+      <button class="input-tab" data-tab="insulin">投与</button>
       <button class="input-tab" data-tab="memo">メモ</button>
       <button class="input-tab" data-tab="gap">欠損区間</button>
     </div>
@@ -157,7 +159,7 @@ canvas#glucoseChart{display:block;width:100%;height:100%}
     </div>
     <div class="input-panel" id="panel-memo">
       <div class="form-row"><div class="form-group"><label>日時</label><input type="datetime-local" id="memoTime" step="60"></div></div>
-      <div class="form-row"><div class="form-group"><label>メモ内容</label><textarea id="memoText" placeholder="食事、体調、運動など自由に記録..."></textarea></div></div>
+      <div class="form-row"><div class="form-group"><label>メモ内容</label><textarea id="memoText" placeholder="食事、体調など自由に記録..."></textarea></div></div>
       <div class="form-row"><button class="btn" id="btnAddMemo">記録</button></div>
     </div>
     <div class="input-panel" id="panel-gap">
@@ -166,7 +168,7 @@ canvas#glucoseChart{display:block;width:100%;height:100%}
         <div class="form-group"><label>欠損終了</label><input type="datetime-local" id="gapEnd" step="60"></div>
         <button class="btn" id="btnAddGap">記録</button>
       </div>
-      <p class="form-hint">センサーデータの欠損区間を登録します。グラフ上で線が途切れて表示されます。</p>
+      <p class="form-hint">センサーデータの欠損区間を登録します。</p>
     </div>
   </div>
   <div class="records-section">
@@ -199,7 +201,7 @@ canvas#glucoseChart{display:block;width:100%;height:100%}
     <div class="form-group" style="margin-top:1rem">
       <label>UID</label>
       <input type="text" id="permUid" readonly>
-      <div class="form-hint">このUIDを管理者に共有して、書き込み権限を付与してもらってください。</div>
+      <div class="form-hint" id="permHint">上記のUIDを管理者に共有してください。</div>
     </div>
     <div style="display:flex;gap:.5rem;justify-content:flex-end;margin-top:1rem">
       <button class="btn btn-secondary" id="btnCopyUid" type="button">UIDをコピー</button>
@@ -223,7 +225,7 @@ const FIREBASE_CONFIG = {
 };
 // ==================================
 
-const APP={mode:null,db:null,auth:null,uid:null,data:{glucose:[],insulin:[],memo:[],gap:[]},loadedUntil:Date.now(),chart:{canvas:null,ctx:null,viewport:null,scrollOffset:0,msPerPixel:0,isDragging:false,dragStartX:0,dragStartOffset:0,currentRange:'24h',yMin:40,yMax:520,pT:30,pB:40,pL:55,pR:15,hitTargets:[]}};
+const APP={mode:null,db:null,auth:null,uid:null,readDenied:false,data:{glucose:[],insulin:[],memo:[],gap:[]},loadedUntil:Date.now(),chart:{canvas:null,ctx:null,viewport:null,scrollOffset:0,msPerPixel:0,isDragging:false,dragStartX:0,dragStartOffset:0,currentRange:'24h',yMin:40,yMax:520,pT:30,pB:40,pL:55,pR:15,hitTargets:[]}};
 const RANGE_H={'24h':24,'3d':72,'7d':168,'30d':720};
 
 // Utils
@@ -237,19 +239,39 @@ function isPermissionDenied(err){
 function hidePermissionPopup(){
   const ov=document.getElementById('permOverlay');
   if(!ov)return;
+  if(ov.dataset.locked==='1') return; // 読み取り権限不足などでロック中は閉じない
   ov.classList.add('hidden');
   ov.setAttribute('aria-hidden','true');
 }
-function showPermissionPopup(err){
+function showPermissionPopup(err, opts={}){
   const ov=document.getElementById('permOverlay');
   if(!ov)return;
+  const mode=opts.mode||'write'; // 'write' | 'read'
+  const locked=!!opts.locked;
+
+  ov.dataset.locked = locked ? '1' : '0';
+
   const uid=APP.uid||'(未取得)';
   document.getElementById('permUid').value=uid;
-  document.getElementById('permMessage').textContent='データの保存に必要な権限がありません。Firestore のセキュリティルール（または管理者設定）で、この UID に書き込み権限を付与してください。';
+
+  const closeBtn=document.getElementById('btnClosePerm');
+  if(closeBtn) closeBtn.style.display = locked ? 'none' : '';
+
+  const msgEl=document.getElementById('permMessage');
+  const hintEl=document.getElementById('permHint');
+
+  if(mode==='read'){
+    msgEl.textContent='データの読み取りに必要な権限がありません。Firestore のセキュリティルール（または管理者設定）で、この UID に読み取り権限を付与してください。';
+    if(hintEl) hintEl.textContent='このUIDを管理者に共有して、読み取り権限を付与してもらってください。';
+  }else{
+    msgEl.textContent='データの保存に必要な権限がありません。Firestore のセキュリティルール（または管理者設定）で、この UID に書き込み権限を付与してください。';
+    if(hintEl) hintEl.textContent='このUIDを管理者に共有して、書き込み権限を付与してもらってください。';
+  }
+
   const detail=document.getElementById('permDetail');
   if(detail){
     const d=(err&&(err.code||err.name||''))+(err&&err.message?(' / '+err.message):'');
-    if(d.trim()){
+    if(String(d||'').trim()){
       detail.textContent=d;
       detail.style.display='block';
     }else{
@@ -262,7 +284,7 @@ function showPermissionPopup(err){
 function handleWriteError(err){
   console.error(err);
   if(isPermissionDenied(err)){
-    showPermissionPopup(err);
+    showPermissionPopup(err,{mode:'write',locked:false});
     toast('権限がありません（書き込み不可）','error');
     return true;
   }
@@ -299,7 +321,7 @@ async function initFB(cfg){
   const cr=await APP.auth.signInAnonymously();APP.uid=cr.user.uid;
   document.getElementById('authStatus').textContent='UID: '+APP.uid.slice(0,8)+'...';
   document.getElementById('authStatus').classList.add('authenticated');
-  APP.mode='firebase';toast('Firebase に接続しました','success');
+  APP.mode='firebase';toast('データベースに接続しました','success');
 }
 function toMs(v){
   if(v==null) return null;
@@ -357,6 +379,7 @@ async function loadJSON(){
 }
 async function ensureLoaded(startTs,endTs){
   if(APP.mode!=='firebase') return;
+  if(APP.readDenied) return;
   if(!Number.isFinite(startTs)) return;
   const endCandidate = Number.isFinite(endTs) ? endTs : Date.now();
   const end = Math.min(endCandidate, APP.loadedUntil);
@@ -366,8 +389,13 @@ async function ensureLoaded(startTs,endTs){
       APP.loadedUntil = startTs;
     }catch(e){
       console.error(e);
-      if(isPermissionDenied(e)) toast('読み取り権限がありません','error');
-      else toast('データ取得に失敗: '+((e&&e.message)?e.message:String(e)),'error');
+      if(isPermissionDenied(e)){
+        APP.readDenied = true;
+        showPermissionPopup(e,{mode:'read',locked:true});
+        toast('読み取り権限がありません','error');
+        return;
+      }
+      toast('データ取得に失敗: '+((e&&e.message)?e.message:String(e)),'error');
       throw e;
     }
   }
@@ -557,14 +585,64 @@ function drawGlucose(ctx,left,right){
 
 function drawInsulin(ctx,vh,left,right){
   const C=APP.chart;
+  const vp=C.viewport||document.getElementById('chartViewport');
+  const vw=(vp&&vp.clientWidth)?vp.clientWidth:800;
+
   for(const r of APP.data.insulin){
-    if(r.timestamp<left||r.timestamp>right)continue;const x=tsX(r.timestamp);
-    ctx.strokeStyle=cv('--chart-insulin-line');ctx.lineWidth=1;ctx.setLineDash([3,3]);ctx.beginPath();ctx.moveTo(x,C.pT);ctx.lineTo(x,vh-C.pB);ctx.stroke();ctx.setLineDash([]);
-    const my=C.pT+10;ctx.fillStyle=cv('--chart-insulin-fill');ctx.beginPath();ctx.moveTo(x,my+18);ctx.lineTo(x-8,my);ctx.lineTo(x+8,my);ctx.closePath();ctx.fill();
-    ctx.fillStyle='#fff';ctx.font='700 9px "JetBrains Mono"';ctx.textAlign='center';ctx.fillText(r.dose,x,my+12);ctx.textAlign='start';
-    C.hitTargets.push({type:'insulin',x,y:my+9,r:12,data:r});
+    if(r.timestamp<left||r.timestamp>right) continue;
+
+    const x=tsX(r.timestamp);
+
+    // dashed time line
+    ctx.strokeStyle=cv('--chart-insulin-line');
+    ctx.lineWidth=1;
+    ctx.setLineDash([3,3]);
+    ctx.beginPath();
+    ctx.moveTo(x,C.pT);
+    ctx.lineTo(x,vh-C.pB);
+    ctx.stroke();
+    ctx.setLineDash([]);
+
+    // dose badge (handles decimals like 2.5)
+    const ds = (Number.isFinite(r.dose) ? (Math.round(r.dose*100)/100).toString() : String(r.dose));
+    ctx.save();
+    ctx.font='700 10px "JetBrains Mono"';
+    const padX=6;
+    const h=16;
+    const tw=ctx.measureText(ds).width;
+    const w=Math.max(18, tw + padX*2);
+
+    // clamp badge so it won't be clipped near chart edges
+    const minCX=C.pL + w/2 + 2;
+    const maxCX=vw - C.pR - w/2 - 2;
+    const cx=Math.min(Math.max(x, minCX), maxCX);
+
+    const y=C.pT + 6;
+    const x0=cx - w/2;
+    const y0=y;
+    const rad=Math.min(8, h/2, w/2);
+
+    ctx.fillStyle=cv('--chart-insulin-fill');
+    ctx.beginPath();
+    ctx.moveTo(x0+rad, y0);
+    ctx.arcTo(x0+w, y0, x0+w, y0+h, rad);
+    ctx.arcTo(x0+w, y0+h, x0, y0+h, rad);
+    ctx.arcTo(x0, y0+h, x0, y0, rad);
+    ctx.arcTo(x0, y0, x0+w, y0, rad);
+    ctx.closePath();
+    ctx.fill();
+
+    ctx.fillStyle='#fff';
+    ctx.textAlign='center';
+    ctx.textBaseline='middle';
+    ctx.fillText(ds, cx, y0 + h/2 + 0.5);
+    ctx.restore();
+
+    // hit target for tooltip
+    C.hitTargets.push({type:'insulin',x:cx,y:y0+h/2,r:Math.max(12, w/2),data:r});
   }
 }
+
 
 function drawMemo(ctx,vh,left,right){
   const C=APP.chart;
@@ -608,8 +686,8 @@ function showTT(e){
   if(!best){tt.style.display='none';return}
   let data={};
   if(best.type==='glucose'){const p=best.data,ds=gDisp(p.value,p.isHi);data={time:fmtDT(p.timestamp),label:ds==='HI'?'HI (≥500 mg/dL)':p.value+' mg/dL',color:gColor(p.value,p.isHi)}}
-  else if(best.type==='insulin')data={time:fmtDT(best.data.timestamp),label:'💉 インスリン: '+best.data.dose};
-  else if(best.type==='memo')data={time:fmtDT(best.data.timestamp),label:'📝 メモ',memo:best.data.text};
+  else if(best.type==='insulin')data={time:fmtDT(best.data.timestamp),label:'投与: '+best.data.dose};
+  else if(best.type==='memo')data={time:fmtDT(best.data.timestamp),label:'メモ',memo:best.data.text};
   tt.style.display='block';tt.style.left=(e.clientX+15)+'px';tt.style.top=(e.clientY-10)+'px';
   tt.querySelector('.tt-time').textContent=data.time||'';const vl=tt.querySelector('.tt-value');vl.textContent=data.label||'';vl.style.color=data.color||cv('--text-primary');
   tt.querySelector('.tt-memo').textContent=data.memo||'';
@@ -652,7 +730,7 @@ function setupUI(){
     try{
       await addRec('insulin',{timestamp:ts,dose});
     }catch(e){return}
-    toast('インスリンを記録しました','success');
+    toast('投与を記録しました','success');
     document.getElementById('insulinDose').value='';
     document.getElementById('insulinTime').value=nowISO();
     refresh();
@@ -690,8 +768,13 @@ function setupUI(){
   // Permission popup
   const permOv=document.getElementById('permOverlay');
   if(permOv){
-    document.getElementById('btnClosePerm').addEventListener('click',hidePermissionPopup);
-    permOv.addEventListener('click',e=>{if(e.target===permOv)hidePermissionPopup();});
+    const closeBtn=document.getElementById('btnClosePerm');
+    if(closeBtn) closeBtn.addEventListener('click',hidePermissionPopup);
+    permOv.addEventListener('click',e=>{
+      if(e.target===permOv){
+        if(permOv.dataset.locked!=='1') hidePermissionPopup();
+      }
+    });
     document.getElementById('btnCopyUid').addEventListener('click',async()=>{
       const uid=document.getElementById('permUid').value||'';
       if(!uid)return;
@@ -718,7 +801,6 @@ async function startApp(){
   try{
     if(APP.mode==='json') await loadJSON();
     if(APP.mode==='firebase'){
-      // 初回ロードの終端を「今」に合わせる（認証に数秒かかっても取りこぼさない）
       const empty = !APP.data.glucose.length && !APP.data.insulin.length && !APP.data.memo.length && !APP.data.gap.length;
       if(empty) APP.loadedUntil = Date.now();
       const {left,right}=visRange();
@@ -742,7 +824,7 @@ function renderList(){
   list.innerHTML=recent.map(r=>{
     let b='',d='';
     if(r.type==='glucose'){b='<span class="record-type-badge glucose">血糖値</span>';const ds=gDisp(r.value,r.isHi);d='<span class="record-value" style="color:'+gColor(r.value,r.isHi)+'">'+ds+'</span>'}
-    else if(r.type==='insulin'){b='<span class="record-type-badge insulin">インスリン</span>';d='<span class="record-value" style="color:var(--accent-orange)">'+r.dose+'</span>'}
+    else if(r.type==='insulin'){b='<span class="record-type-badge insulin">投与</span>';d='<span class="record-value" style="color:var(--accent-orange)">'+r.dose+'</span>'}
     else if(r.type==='memo'){b='<span class="record-type-badge memo">メモ</span>';d='<span class="record-memo-text">'+esc(r.text)+'</span>'}
     else if(r.type==='gap'){b='<span class="record-type-badge gap">欠損</span>';d='<span class="record-memo-text">'+fmtDT(r.startTs)+' 〜 '+fmtDT(r.endTs)+'</span>'}
     const delBtn=APP.mode==='json'?'':'<button class="record-delete" onclick="handleDel(\''+r.type+'\',\''+r.id+'\')" title="削除">✕</button>';
