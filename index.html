@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>血糖値モニター</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg-primary:#f5f6f8;--bg-card:#fff;--bg-card-hover:#f9fafb;--bg-input:#f0f2f5;--border-color:#dfe3ea;--border-focus:#4a9eff;--text-primary:#1a2233;--text-secondary:#5a6678;--text-muted:#8c95a6;--accent-blue:#3b82f6;--accent-blue-dim:rgba(59,130,246,.1);--accent-green:#16a34a;--accent-green-dim:rgba(22,163,74,.08);--accent-orange:#d97706;--accent-orange-dim:rgba(217,119,6,.1);--accent-red:#dc2626;--accent-red-dim:rgba(220,38,38,.08);--accent-purple:#7c3aed;--accent-purple-dim:rgba(124,58,237,.08);--chart-bg:#fff;--chart-grid:rgba(0,0,0,.05);--chart-grid-strong:rgba(0,0,0,.12);--chart-text:rgba(0,0,0,.35);--chart-text-strong:rgba(0,0,0,.55);--chart-glucose:#3b82f6;--chart-normal-fill:rgba(22,163,74,.05);--chart-normal-border:rgba(22,163,74,.22);--chart-normal-text:rgba(22,163,74,.5);--chart-hi-border:rgba(220,38,38,.22);--chart-hi-text:rgba(220,38,38,.5);--chart-gap-fill:rgba(0,0,0,.02);--chart-gap-stripe:rgba(0,0,0,.05);--chart-gap-text:rgba(0,0,0,.15);--chart-insulin-line:rgba(217,119,6,.3);--chart-insulin-fill:rgba(217,119,6,.85);--chart-memo-fill:rgba(124,58,237,.7);--chart-yaxis-bg:#fff;--shadow-sm:0 1px 3px rgba(0,0,0,.06);--shadow-md:0 4px 12px rgba(0,0,0,.08);--font-sans:'Noto Sans JP',sans-serif;--font-mono:'JetBrains Mono',monospace;--radius-sm:6px;--radius-md:10px;--radius-lg:16px;--transition:.2s ease}
+[data-theme="dark"]{--bg-primary:#0a0e17;--bg-card:#1a2235;--bg-card-hover:#1f2a40;--bg-input:#0f1628;--border-color:#2a3550;--text-primary:#e8ecf4;--text-secondary:#8896b0;--text-muted:#5a6a85;--accent-blue:#4a9eff;--accent-blue-dim:rgba(74,158,255,.15);--accent-green:#34d399;--accent-green-dim:rgba(52,211,153,.08);--accent-orange:#f59e0b;--accent-orange-dim:rgba(245,158,11,.15);--accent-red:#ef4444;--accent-red-dim:rgba(239,68,68,.15);--accent-purple:#a78bfa;--accent-purple-dim:rgba(167,139,250,.15);--chart-bg:#1a2235;--chart-grid:rgba(255,255,255,.04);--chart-grid-strong:rgba(255,255,255,.12);--chart-text:rgba(255,255,255,.25);--chart-text-strong:rgba(255,255,255,.4);--chart-glucose:#4a9eff;--chart-normal-fill:rgba(52,211,153,.06);--chart-normal-border:rgba(52,211,153,.2);--chart-normal-text:rgba(52,211,153,.45);--chart-hi-border:rgba(239,68,68,.3);--chart-hi-text:rgba(239,68,68,.45);--chart-gap-fill:rgba(255,255,255,.02);--chart-gap-stripe:rgba(255,255,255,.04);--chart-gap-text:rgba(255,255,255,.15);--chart-insulin-line:rgba(245,158,11,.4);--chart-insulin-fill:rgba(245,158,11,.9);--chart-memo-fill:rgba(167,139,250,.8);--chart-yaxis-bg:#1a2235;--shadow-sm:0 1px 3px rgba(0,0,0,.3);--shadow-md:0 4px 12px rgba(0,0,0,.4)}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html{font-size:15px}body{font-family:var(--font-sans);background:var(--bg-primary);color:var(--text-primary);line-height:1.6;min-height:100vh;-webkit-font-smoothing:antialiased;transition:background .3s,color .3s}
+.app-container{max-width:1200px;margin:0 auto;padding:1.5rem 1rem}
+header{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.5rem;padding-bottom:1rem;border-bottom:1px solid var(--border-color)}
+header h1{font-size:1.4rem;font-weight:600;display:flex;align-items:center;gap:.6rem}
+.header-right{display:flex;align-items:center;gap:.75rem}
+.auth-status{font-size:.75rem;color:var(--text-muted);font-family:var(--font-mono)}
+.auth-status.authenticated{color:var(--accent-green)}
+.theme-toggle{background:var(--bg-input);border:1px solid var(--border-color);width:36px;height:36px;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:1.1rem;transition:all var(--transition)}
+.theme-toggle:hover{border-color:var(--accent-blue)}
+.stats-bar{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:.75rem;margin-bottom:1.5rem}
+.stat-card{background:var(--bg-card);border:1px solid var(--border-color);border-radius:var(--radius-md);padding:.9rem 1rem;box-shadow:var(--shadow-sm)}
+.stat-label{font-size:.7rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:.08em;font-weight:500;margin-bottom:.25rem}
+.stat-value{font-family:var(--font-mono);font-size:1.5rem;font-weight:600}
+.stat-value.normal{color:var(--accent-green)}.stat-value.warning{color:var(--accent-orange)}.stat-value.danger{color:var(--accent-red)}.stat-value.muted{color:var(--text-muted)}
+.stat-sub{font-size:.7rem;color:var(--text-muted);margin-top:.15rem}
+.chart-section{background:var(--bg-card);border:1px solid var(--border-color);border-radius:var(--radius-lg);padding:1rem;margin-bottom:1.5rem;box-shadow:var(--shadow-sm)}
+.chart-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:.75rem;flex-wrap:wrap;gap:.5rem}
+.chart-title{font-size:.85rem;font-weight:500;color:var(--text-secondary)}
+.chart-controls{display:flex;gap:.4rem;align-items:center}
+.chart-controls button{background:var(--bg-input);border:1px solid var(--border-color);color:var(--text-secondary);font-family:var(--font-sans);font-size:.75rem;padding:.35rem .7rem;border-radius:var(--radius-sm);cursor:pointer;transition:all var(--transition)}
+.chart-controls button:hover{border-color:var(--accent-blue);color:var(--text-primary)}
+.chart-controls button.active{background:var(--accent-blue-dim);border-color:var(--accent-blue);color:var(--accent-blue)}
+.chart-viewport{position:relative;width:100%;height:400px;overflow:hidden;cursor:grab;border-radius:var(--radius-sm);background:var(--chart-bg);border:1px solid var(--border-color)}
+.chart-viewport:active{cursor:grabbing}
+canvas#glucoseChart{display:block;width:100%;height:100%}
+.chart-date-indicator{position:absolute;top:.5rem;left:60px;font-family:var(--font-mono);font-size:.75rem;color:var(--text-muted);z-index:6;pointer-events:none;background:var(--chart-bg);padding:.1rem .4rem;border-radius:3px;opacity:.8}
+.chart-loading{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);color:var(--text-muted);font-size:.85rem;z-index:10}
+.chart-tooltip{position:fixed;background:var(--bg-card);border:1px solid var(--border-color);border-radius:var(--radius-sm);padding:.5rem .7rem;font-size:.75rem;color:var(--text-primary);pointer-events:none;z-index:100;display:none;box-shadow:var(--shadow-md);max-width:260px}
+.chart-tooltip .tt-time{font-family:var(--font-mono);color:var(--text-muted);font-size:.7rem;margin-bottom:.2rem}
+.chart-tooltip .tt-value{font-family:var(--font-mono);font-weight:600;font-size:.9rem}
+.chart-tooltip .tt-memo{color:var(--text-secondary);margin-top:.3rem;font-size:.72rem;line-height:1.4}
+.input-section{margin-bottom:1.5rem}
+.input-tabs{display:flex;gap:.3rem}
+.input-tab{background:var(--bg-card);border:1px solid var(--border-color);border-bottom:none;color:var(--text-secondary);font-family:var(--font-sans);font-size:.8rem;font-weight:500;padding:.5rem 1rem;border-radius:var(--radius-sm) var(--radius-sm) 0 0;cursor:pointer;transition:all var(--transition);position:relative;top:1px}
+.input-tab:hover{color:var(--text-primary)}
+.input-tab.active{background:var(--bg-card);z-index:1}
+.input-tab[data-tab="glucose"].active{border-bottom:2px solid var(--accent-blue);color:var(--accent-blue)}
+.input-tab[data-tab="insulin"].active{border-bottom:2px solid var(--accent-orange);color:var(--accent-orange)}
+.input-tab[data-tab="memo"].active{border-bottom:2px solid var(--accent-purple);color:var(--accent-purple)}
+.input-tab[data-tab="gap"].active{border-bottom:2px solid var(--text-muted);color:var(--text-muted)}
+.input-panel{display:none;background:var(--bg-card);border:1px solid var(--border-color);border-radius:0 var(--radius-md) var(--radius-md) var(--radius-md);padding:1.2rem;box-shadow:var(--shadow-sm)}
+.input-panel.active{display:block}
+.form-row{display:flex;gap:.75rem;align-items:flex-end;flex-wrap:wrap;margin-bottom:.75rem}.form-row:last-child{margin-bottom:0}
+.form-group{display:flex;flex-direction:column;gap:.3rem;flex:1;min-width:140px}
+.form-group label{font-size:.72rem;color:var(--text-muted);font-weight:500;text-transform:uppercase;letter-spacing:.05em}
+.form-group input,.form-group textarea{background:var(--bg-input);border:1px solid var(--border-color);color:var(--text-primary);font-family:var(--font-sans);font-size:.85rem;padding:.55rem .7rem;border-radius:var(--radius-sm);transition:border-color var(--transition);outline:none;width:100%}
+.form-group input:focus,.form-group textarea:focus{border-color:var(--border-focus)}
+.form-group textarea{resize:vertical;min-height:60px}
+.form-group input[type="datetime-local"]{font-family:var(--font-mono);font-size:.8rem}
+.btn{background:var(--accent-blue);color:#fff;border:none;font-family:var(--font-sans);font-size:.8rem;font-weight:500;padding:.55rem 1.2rem;border-radius:var(--radius-sm);cursor:pointer;transition:all var(--transition);white-space:nowrap}
+.btn:hover{filter:brightness(1.1)}.btn:disabled{opacity:.5;cursor:not-allowed}
+.btn-secondary{background:var(--bg-input);border:1px solid var(--border-color);color:var(--text-secondary)}
+.btn-secondary:hover{border-color:var(--text-muted);color:var(--text-primary)}
+.form-hint{font-size:.7rem;color:var(--text-muted);margin-top:.2rem}
+.checkbox-row{display:flex;align-items:center;gap:.5rem;padding:.4rem 0}
+.checkbox-row input[type="checkbox"]{width:16px;height:16px;accent-color:var(--accent-blue)}
+.checkbox-row label{font-size:.8rem;color:var(--text-secondary);cursor:pointer}
+.records-section{background:var(--bg-card);border:1px solid var(--border-color);border-radius:var(--radius-lg);padding:1rem;margin-bottom:1.5rem;box-shadow:var(--shadow-sm)}
+.records-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:.75rem}
+.records-title{font-size:.85rem;font-weight:500;color:var(--text-secondary)}
+.record-list{display:flex;flex-direction:column;gap:.4rem;max-height:300px;overflow-y:auto}
+.record-item{display:flex;align-items:center;gap:.75rem;padding:.5rem .6rem;background:var(--bg-input);border-radius:var(--radius-sm);font-size:.8rem;transition:background var(--transition)}
+.record-item:hover{background:var(--bg-card-hover)}
+.record-type-badge{font-size:.65rem;font-weight:600;text-transform:uppercase;letter-spacing:.05em;padding:.15rem .5rem;border-radius:3px;white-space:nowrap}
+.record-type-badge.glucose{background:var(--accent-blue-dim);color:var(--accent-blue)}
+.record-type-badge.insulin{background:var(--accent-orange-dim);color:var(--accent-orange)}
+.record-type-badge.memo{background:var(--accent-purple-dim);color:var(--accent-purple)}
+.record-type-badge.gap{background:rgba(0,0,0,.04);color:var(--text-muted)}
+[data-theme="dark"] .record-type-badge.gap{background:rgba(255,255,255,.05)}
+.record-time{font-family:var(--font-mono);font-size:.75rem;color:var(--text-muted);white-space:nowrap}
+.record-value{font-family:var(--font-mono);font-weight:500}
+.record-memo-text{color:var(--text-secondary);font-size:.78rem;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.record-delete{margin-left:auto;background:none;border:none;color:var(--text-muted);cursor:pointer;font-size:.85rem;padding:.2rem;opacity:0;transition:all var(--transition)}
+.record-item:hover .record-delete{opacity:1}.record-delete:hover{color:var(--accent-red)}
+.empty-state{text-align:center;padding:2rem;color:var(--text-muted);font-size:.85rem}
+.setup-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.5);z-index:1000;display:flex;align-items:center;justify-content:center;padding:1rem}
+.setup-overlay.hidden{display:none}
+.setup-box{background:var(--bg-card);border:1px solid var(--border-color);border-radius:var(--radius-lg);padding:2rem;max-width:500px;width:100%;box-shadow:0 8px 32px rgba(0,0,0,.15)}
+.setup-box h2{font-size:1.1rem;font-weight:600;margin-bottom:.5rem}
+.setup-box p{font-size:.8rem;color:var(--text-secondary);margin-bottom:1rem;line-height:1.5}
+.setup-box .form-group{margin-bottom:.75rem}
+.toast-container{position:fixed;bottom:1.5rem;right:1.5rem;z-index:9999;display:flex;flex-direction:column;gap:.5rem}
+.toast{background:var(--bg-card);border:1px solid var(--border-color);border-radius:var(--radius-sm);padding:.6rem 1rem;font-size:.8rem;color:var(--text-primary);box-shadow:var(--shadow-md);animation:toastin .3s ease;max-width:320px}
+.toast.success{border-left:3px solid var(--accent-green)}.toast.error{border-left:3px solid var(--accent-red)}.toast.info{border-left:3px solid var(--accent-blue)}
+@keyframes toastin{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+::-webkit-scrollbar{width:6px;height:6px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:var(--border-color);border-radius:3px}
+@media(max-width:600px){html{font-size:14px}.app-container{padding:1rem .5rem}.chart-viewport{height:300px}.stats-bar{grid-template-columns:repeat(2,1fr)}header{flex-direction:column;align-items:flex-start;gap:.5rem}.header-right{align-self:flex-end}.form-row{flex-direction:column}.form-group{min-width:100%}}
+</style>
+</head>
+<body>
+<div class="app-container">
+  <header>
+    <h1><span class="icon">📊</span> 血糖値モニター</h1>
+    <div class="header-right">
+      <div class="auth-status" id="authStatus">未接続</div>
+      <button class="theme-toggle" id="themeToggle" title="テーマ切替">🌙</button>
+    </div>
+  </header>
+  <div class="stats-bar">
+    <div class="stat-card"><div class="stat-label">過去24h 平均</div><div class="stat-value muted" id="statAvg">--</div><div class="stat-sub">mg/dL</div></div>
+    <div class="stat-card"><div class="stat-label">過去24h 最高</div><div class="stat-value muted" id="statMax">--</div><div class="stat-sub">mg/dL</div></div>
+    <div class="stat-card"><div class="stat-label">過去24h 最低</div><div class="stat-value muted" id="statMin">--</div><div class="stat-sub">mg/dL</div></div>
+    <div class="stat-card"><div class="stat-label">最新の記録</div><div class="stat-value muted" id="statLatest">--</div><div class="stat-sub" id="statLatestTime">--</div></div>
+  </div>
+  <div class="chart-section">
+    <div class="chart-header">
+      <div class="chart-title">血糖値推移</div>
+      <div class="chart-controls">
+        <button data-range="24h" class="active">24h</button>
+        <button data-range="3d">3日</button>
+        <button data-range="7d">7日</button>
+        <button data-range="30d">30日</button>
+        <button id="btnGoLatest" title="最新へ">→ 最新</button>
+      </div>
+    </div>
+    <div class="chart-viewport" id="chartViewport">
+      <div class="chart-date-indicator" id="chartDateIndicator"></div>
+      <canvas id="glucoseChart"></canvas>
+      <div class="chart-loading" id="chartLoading">データを読み込み中...</div>
+    </div>
+    <div class="chart-tooltip" id="chartTooltip"><div class="tt-time"></div><div class="tt-value"></div><div class="tt-memo"></div></div>
+  </div>
+  <div class="input-section">
+    <div class="input-tabs">
+      <button class="input-tab active" data-tab="glucose">血糖値</button>
+      <button class="input-tab" data-tab="insulin">インスリン</button>
+      <button class="input-tab" data-tab="memo">メモ</button>
+      <button class="input-tab" data-tab="gap">欠損区間</button>
+    </div>
+    <div class="input-panel active" id="panel-glucose">
+      <div class="form-row">
+        <div class="form-group"><label>日時</label><input type="datetime-local" id="glucoseTime" step="60"></div>
+        <div class="form-group" style="max-width:140px"><label>血糖値 (mg/dL)</label><input type="number" id="glucoseValue" placeholder="例: 320" min="0" max="999"></div>
+        <button class="btn" id="btnAddGlucose">記録</button>
+      </div>
+      <div class="checkbox-row"><input type="checkbox" id="glucoseIsHi"><label for="glucoseIsHi">HI (500超) として記録</label></div>
+    </div>
+    <div class="input-panel" id="panel-insulin">
+      <div class="form-row">
+        <div class="form-group"><label>日時</label><input type="datetime-local" id="insulinTime" step="60"></div>
+        <div class="form-group" style="max-width:140px"><label>投与量</label><input type="number" id="insulinDose" placeholder="例: 3" min="0" step="0.5"></div>
+        <button class="btn" id="btnAddInsulin">記録</button>
+      </div>
+    </div>
+    <div class="input-panel" id="panel-memo">
+      <div class="form-row"><div class="form-group"><label>日時</label><input type="datetime-local" id="memoTime" step="60"></div></div>
+      <div class="form-row"><div class="form-group"><label>メモ内容</label><textarea id="memoText" placeholder="食事、体調、運動など自由に記録..."></textarea></div></div>
+      <div class="form-row"><button class="btn" id="btnAddMemo">記録</button></div>
+    </div>
+    <div class="input-panel" id="panel-gap">
+      <div class="form-row">
+        <div class="form-group"><label>欠損開始</label><input type="datetime-local" id="gapStart" step="60"></div>
+        <div class="form-group"><label>欠損終了</label><input type="datetime-local" id="gapEnd" step="60"></div>
+        <button class="btn" id="btnAddGap">記録</button>
+      </div>
+      <p class="form-hint">センサーデータの欠損区間を登録します。グラフ上で線が途切れて表示されます。</p>
+    </div>
+  </div>
+  <div class="records-section">
+    <div class="records-header">
+      <div class="records-title">直近の記録</div>
+      <button class="btn btn-secondary" id="btnRefreshRecords" style="font-size:.72rem;padding:.3rem .6rem">更新</button>
+    </div>
+    <div class="record-list" id="recordList"><div class="empty-state">データがありません</div></div>
+  </div>
+</div>
+<div class="setup-overlay" id="setupOverlay">
+  <div class="setup-box">
+    <h2>🔧 Firebase 接続設定</h2>
+    <p>Firebaseプロジェクトの設定情報を入力してください。ブラウザに保存されます。</p>
+    <div class="form-group"><label>API Key</label><input type="text" id="cfgApiKey" placeholder="AIzaSy..."></div>
+    <div class="form-group"><label>Auth Domain</label><input type="text" id="cfgAuthDomain" placeholder="your-app.firebaseapp.com"></div>
+    <div class="form-group"><label>Project ID</label><input type="text" id="cfgProjectId" placeholder="your-app-id"></div>
+    <div style="display:flex;gap:.5rem;margin-top:1rem">
+      <button class="btn" id="btnSaveConfig">接続</button>
+      <button class="btn btn-secondary" id="btnSkipConfig">JSONファイルモードで使う</button>
+    </div>
+    <p class="form-hint" style="margin-top:.75rem">JSONファイルモードではリポジトリ内のJSONファイルからデータを読み込みます。</p>
+  </div>
+</div>
+<div class="toast-container" id="toastContainer"></div>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
+<script>
+// ========== Firebase設定 ==========
+// 以下にFirebaseの設定を直接記入すれば、起動時に自動接続します。
+// GitHub Pagesで公開する場合、APIキーはFirestoreのセキュリティルールで保護してください。
+// 空のままにすると起動時に設定画面が表示されます。
+const FIREBASE_CONFIG = {
+  apiKey: '',
+  authDomain: '',
+  projectId: '',
+};
+// ==================================
+
+const APP={mode:null,db:null,auth:null,uid:null,data:{glucose:[],insulin:[],memo:[],gap:[]},loadedUntil:Date.now(),chart:{canvas:null,ctx:null,viewport:null,scrollOffset:0,msPerPixel:0,isDragging:false,dragStartX:0,dragStartOffset:0,currentRange:'24h',yMin:40,yMax:520,pT:30,pB:40,pL:55,pR:15,hitTargets:[]}};
+const RANGE_H={'24h':24,'3d':72,'7d':168,'30d':720};
+
+// Utils
+function toast(m,t='info'){const e=document.createElement('div');e.className='toast '+t;e.textContent=m;document.getElementById('toastContainer').appendChild(e);setTimeout(()=>e.remove(),3500)}
+function fmtDT(ts){const d=new Date(ts);return`${String(d.getMonth()+1).padStart(2,'0')}/${String(d.getDate()).padStart(2,'0')} ${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}`}
+function fmtDate(ts){const d=new Date(ts);return`${d.getFullYear()}/${String(d.getMonth()+1).padStart(2,'0')}/${String(d.getDate()).padStart(2,'0')}`}
+function nowISO(){const d=new Date();d.setMinutes(d.getMinutes()-d.getTimezoneOffset());return d.toISOString().slice(0,16)}
+function gDisp(v,hi){return(hi||v>=500)?'HI':String(v)}
+function gColor(v,hi){if(hi||v>=500)return'#dc2626';if(v>=70&&v<=180)return'#16a34a';if(v>180&&v<300)return'#d97706';return'#dc2626'}
+function statCls(v){if(v==null)return'muted';if(v>=70&&v<=180)return'normal';if(v>180&&v<300)return'warning';return'danger'}
+function esc(s){const d=document.createElement('div');d.textContent=s;return d.innerHTML}
+function cv(n){return getComputedStyle(document.documentElement).getPropertyValue(n).trim()}
+
+// Theme
+function initTheme(){
+  const s=localStorage.getItem('glucose_theme');
+  if(s==='dark'){document.documentElement.setAttribute('data-theme','dark');document.getElementById('themeToggle').textContent='☀️'}
+  document.getElementById('themeToggle').addEventListener('click',()=>{
+    const dk=document.documentElement.getAttribute('data-theme')==='dark';
+    if(dk){document.documentElement.removeAttribute('data-theme');document.getElementById('themeToggle').textContent='🌙';localStorage.setItem('glucose_theme','light')}
+    else{document.documentElement.setAttribute('data-theme','dark');document.getElementById('themeToggle').textContent='☀️';localStorage.setItem('glucose_theme','dark')}
+    drawChart();
+  });
+}
+
+// Firebase
+function loadCfg(){try{return JSON.parse(localStorage.getItem('glucose_monitor_config'))}catch{return null}}
+function saveCfg(c){localStorage.setItem('glucose_monitor_config',JSON.stringify(c))}
+async function initFB(cfg){
+  firebase.initializeApp({apiKey:cfg.apiKey,authDomain:cfg.authDomain,projectId:cfg.projectId});
+  APP.db=firebase.firestore();APP.auth=firebase.auth();
+  const cr=await APP.auth.signInAnonymously();APP.uid=cr.user.uid;
+  document.getElementById('authStatus').textContent='UID: '+APP.uid.slice(0,8)+'...';
+  document.getElementById('authStatus').classList.add('authenticated');
+  APP.mode='firebase';toast('Firebase に接続しました','success');
+}
+async function loadFBRange(s,e){
+  const ld=async(c)=>{const sn=await APP.db.collection(c).where('timestamp','>=',s).where('timestamp','<=',e).orderBy('timestamp','asc').get();return sn.docs.map(d=>({id:d.id,...d.data()}))};
+  const[g,i,m,gp]=await Promise.all([ld('glucose'),ld('insulin'),ld('memo'),ld('gap')]);
+  const merge=(a,n)=>{const ids=new Set(a.map(r=>r.id));for(const r of n)if(!ids.has(r.id))a.push(r);a.sort((a,b)=>a.timestamp-b.timestamp)};
+  merge(APP.data.glucose,g);merge(APP.data.insulin,i);merge(APP.data.memo,m);merge(APP.data.gap,gp);
+}
+async function loadJSON(){
+  for(const t of['glucose','insulin','memo','gap']){try{const r=await fetch('data/'+t+'.json');if(r.ok)APP.data[t]=(await r.json()).map(r=>({...r,timestamp:Number(r.timestamp),id:r.id||'j_'+t+'_'+r.timestamp}))}catch{}}
+}
+async function ensureLoaded(startTs,endTs){
+  if(APP.mode==='firebase'&&startTs<APP.loadedUntil){try{await loadFBRange(startTs,APP.loadedUntil)}catch(e){console.error(e)}APP.loadedUntil=startTs}
+}
+async function addDoc(c,d){return(await APP.db.collection(c).add(d)).id}
+async function delDoc(c,id){await APP.db.collection(c).doc(id).delete()}
+async function addRec(type,data){
+  if(APP.mode==='firebase')data.id=await addDoc(type,data);
+  else data.id='l_'+Date.now()+'_'+Math.random().toString(36).slice(2,6);
+  APP.data[type].push(data);APP.data[type].sort((a,b)=>a.timestamp-b.timestamp);
+}
+async function delRec(type,id){if(APP.mode==='firebase')await delDoc(type,id);APP.data[type]=APP.data[type].filter(r=>r.id!==id)}
+
+// Stats
+function updateStats(){
+  const now=Date.now(),h24=now-86400000;
+  const rec=APP.data.glucose.filter(r=>r.timestamp>=h24&&!r.isHi);
+  const all=APP.data.glucose.filter(r=>r.timestamp>=h24);
+  const set=(id,v,c)=>{const e=document.getElementById(id);e.textContent=v;e.className='stat-value '+c};
+  if(rec.length===0){set('statAvg','--','muted');set('statMax','--','muted');set('statMin','--','muted')}
+  else{const vs=rec.map(r=>r.value),a=Math.round(vs.reduce((a,b)=>a+b,0)/vs.length),mx=Math.max(...vs),mn=Math.min(...vs);set('statAvg',a,statCls(a));set('statMax',mx,statCls(mx));set('statMin',mn,statCls(mn))}
+  if(all.length>0){const l=all[all.length-1],ds=gDisp(l.value,l.isHi);set('statLatest',ds,ds==='HI'?'danger':statCls(l.value));document.getElementById('statLatestTime').textContent=fmtDT(l.timestamp)}
+  else{set('statLatest','--','muted');document.getElementById('statLatestTime').textContent='--'}
+}
+
+// Chart
+function initChart(){
+  const C=APP.chart;C.canvas=document.getElementById('glucoseChart');C.ctx=C.canvas.getContext('2d');C.viewport=document.getElementById('chartViewport');
+  updateMPP();setupChartEvents();handleResize();window.addEventListener('resize',handleResize);
+}
+function updateMPP(){
+  const C=APP.chart,vw=C.viewport?C.viewport.clientWidth:800,dw=vw-C.pL-C.pR;
+  C.msPerPixel=(RANGE_H[C.currentRange]*3600000)/dw;
+}
+function handleResize(){
+  const C=APP.chart,vw=C.viewport.clientWidth,vh=C.viewport.clientHeight,dpr=window.devicePixelRatio||1;
+  C.canvas.width=vw*dpr;C.canvas.height=vh*dpr;C.canvas.style.width=vw+'px';C.canvas.style.height=vh+'px';
+  C.ctx.setTransform(dpr,0,0,dpr,0,0);updateMPP();drawChart();
+}
+function visRange(){
+  const C=APP.chart,vw=C.viewport.clientWidth,dw=vw-C.pL-C.pR,now=Date.now();
+  const right=now-C.scrollOffset,left=right-dw*C.msPerPixel;
+  return{left,right,dw};
+}
+function tsX(ts){const C=APP.chart,{left,right,dw}=visRange();return C.pL+((ts-left)/(right-left))*dw}
+function valY(v){const C=APP.chart,vh=C.viewport.clientHeight,dh=vh-C.pT-C.pB;return C.pT+dh*(1-(v-C.yMin)/(C.yMax-C.yMin))}
+
+function drawChart(){
+  const C=APP.chart,ctx=C.ctx,vw=C.viewport.clientWidth,vh=C.viewport.clientHeight,{left,right}=visRange();
+  ctx.clearRect(0,0,vw,vh);C.hitTargets=[];
+  drawGrid(ctx,vw,vh,left,right);drawNormal(ctx,vw,vh);drawHiLine(ctx,vw);
+  drawGaps(ctx,vw,vh,left,right);drawGlucose(ctx,left,right);
+  drawInsulin(ctx,vh,left,right);drawMemo(ctx,vh,left,right);drawYAxis(ctx,vw,vh);
+  document.getElementById('chartDateIndicator').textContent=fmtDate(left);
+  document.getElementById('chartLoading').style.display='none';
+}
+
+function drawGrid(ctx,vw,vh,left,right){
+  const C=APP.chart;
+  ctx.strokeStyle=cv('--chart-grid');ctx.lineWidth=1;
+  for(let v=50;v<=500;v+=50){const y=valY(v);ctx.beginPath();ctx.moveTo(C.pL,y);ctx.lineTo(vw-C.pR,y);ctx.stroke()}
+  const sh=new Date(left);sh.setMinutes(0,0,0);let t=sh.getTime();
+  const hrs=RANGE_H[C.currentRange]||24,lbl=hrs<=24?1:hrs<=72?3:hrs<=168?6:12;
+  ctx.textAlign='center';
+  let lastTimeLabelX=-999,lastDateLabelX=-999;
+  const minTimeGap=50,minDateGap=90;
+  while(t<=right){
+    const x=tsX(t);
+    if(x>=C.pL&&x<=vw-C.pR){
+      const d=new Date(t),h=d.getHours();
+      if(h===0){ctx.strokeStyle=cv('--chart-grid-strong');ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(x,C.pT);ctx.lineTo(x,vh-C.pB);ctx.stroke();if(x-lastDateLabelX>minDateGap){ctx.fillStyle=cv('--chart-text-strong');ctx.font='500 11px "Noto Sans JP"';ctx.fillText(fmtDate(t),x,vh-C.pB+28);lastDateLabelX=x}}
+      else{ctx.strokeStyle=cv('--chart-grid');ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(x,C.pT);ctx.lineTo(x,vh-C.pB);ctx.stroke()}
+      if(h%lbl===0&&x-lastTimeLabelX>minTimeGap){ctx.fillStyle=cv('--chart-text');ctx.font='400 10px "JetBrains Mono"';ctx.fillText(String(h).padStart(2,'0')+':00',x,vh-C.pB+14);lastTimeLabelX=x}
+    }
+    t+=3600000;
+  }
+  ctx.textAlign='start';
+}
+
+function drawNormal(ctx,vw,vh){
+  const C=APP.chart,y180=valY(180),y70=valY(70);
+  ctx.fillStyle=cv('--chart-normal-fill');ctx.fillRect(C.pL,y180,vw-C.pL-C.pR,y70-y180);
+  ctx.strokeStyle=cv('--chart-normal-border');ctx.lineWidth=1;ctx.setLineDash([4,4]);
+  ctx.beginPath();ctx.moveTo(C.pL,y180);ctx.lineTo(vw-C.pR,y180);ctx.moveTo(C.pL,y70);ctx.lineTo(vw-C.pR,y70);ctx.stroke();ctx.setLineDash([]);
+  ctx.fillStyle=cv('--chart-normal-text');ctx.font='500 10px "Noto Sans JP"';ctx.fillText('正常範囲 70-180',C.pL+6,y180+14);
+}
+
+function drawHiLine(ctx,vw){
+  const C=APP.chart,y=valY(500);
+  ctx.strokeStyle=cv('--chart-hi-border');ctx.lineWidth=1;ctx.setLineDash([2,4]);
+  ctx.beginPath();ctx.moveTo(C.pL,y);ctx.lineTo(vw-C.pR,y);ctx.stroke();ctx.setLineDash([]);
+  ctx.fillStyle=cv('--chart-hi-text');ctx.font='600 10px "JetBrains Mono"';ctx.fillText('HI (≥500)',C.pL+6,y-5);
+}
+
+function drawGaps(ctx,vw,vh,left,right){
+  const C=APP.chart;
+  for(const g of APP.data.gap){
+    if(g.endTs<left||g.startTs>right)continue;
+    const x1=Math.max(C.pL,tsX(g.startTs)),x2=Math.min(vw-C.pR,tsX(g.endTs));
+    if(x2<=x1)continue;
+    ctx.fillStyle=cv('--chart-gap-fill');ctx.fillRect(x1,C.pT,x2-x1,vh-C.pT-C.pB);
+    ctx.save();ctx.beginPath();ctx.rect(x1,C.pT,x2-x1,vh-C.pT-C.pB);ctx.clip();
+    ctx.strokeStyle=cv('--chart-gap-stripe');ctx.lineWidth=1;
+    for(let sx=x1-vh;sx<x2+vh;sx+=12){ctx.beginPath();ctx.moveTo(sx,C.pT);ctx.lineTo(sx+vh,vh);ctx.stroke()}
+    ctx.restore();
+    ctx.fillStyle=cv('--chart-gap-text');ctx.font='400 10px "Noto Sans JP"';ctx.textAlign='center';ctx.fillText('欠損',(x1+x2)/2,(C.pT+vh-C.pB)/2);ctx.textAlign='start';
+  }
+}
+
+function buildSegs(data){
+  if(!data.length)return[];const gaps=APP.data.gap,segs=[];let cur=[];
+  for(const p of data){
+    const inG=gaps.some(g=>p.timestamp>=g.startTs&&p.timestamp<=g.endTs);
+    if(inG){if(cur.length){segs.push(cur);cur=[]}continue}
+    if(cur.length){const pr=cur[cur.length-1];if(gaps.some(g=>g.startTs>pr.timestamp&&g.startTs<p.timestamp)){segs.push(cur);cur=[]}}
+    cur.push(p);
+  }
+  if(cur.length)segs.push(cur);return segs;
+}
+
+function drawGlucose(ctx,left,right){
+  const C=APP.chart,margin=(right-left)*.05;
+  const vis=APP.data.glucose.filter(r=>r.timestamp>=left-margin&&r.timestamp<=right+margin);
+  if(!vis.length)return;
+  const segs=buildSegs(vis);
+  for(const seg of segs){
+    if(seg.length===1){const p=seg[0],x=tsX(p.timestamp),y=valY(Math.min(p.isHi?500:p.value,500));ctx.fillStyle=cv('--chart-glucose');ctx.beginPath();ctx.arc(x,y,3,0,Math.PI*2);ctx.fill();C.hitTargets.push({type:'glucose',x,y,r:8,data:p});continue}
+    ctx.beginPath();ctx.strokeStyle=cv('--chart-glucose');ctx.lineWidth=2.5;ctx.lineJoin='round';ctx.lineCap='round';
+    for(let i=0;i<seg.length;i++){const p=seg[i],x=tsX(p.timestamp),v=Math.min(p.isHi?500:p.value,500),y=valY(v);if(i===0)ctx.moveTo(x,y);else ctx.lineTo(x,y);C.hitTargets.push({type:'glucose',x,y,r:8,data:p})}
+    ctx.stroke();
+    for(const p of seg){if(p.isHi||p.value>=500){const x=tsX(p.timestamp),y=valY(500);ctx.fillStyle='#dc2626';ctx.beginPath();ctx.arc(x,y,4,0,Math.PI*2);ctx.fill();ctx.font='700 9px "JetBrains Mono"';ctx.textAlign='center';ctx.fillText('HI',x,y-8);ctx.textAlign='start'}}
+  }
+}
+
+function drawInsulin(ctx,vh,left,right){
+  const C=APP.chart;
+  for(const r of APP.data.insulin){
+    if(r.timestamp<left||r.timestamp>right)continue;const x=tsX(r.timestamp);
+    ctx.strokeStyle=cv('--chart-insulin-line');ctx.lineWidth=1;ctx.setLineDash([3,3]);ctx.beginPath();ctx.moveTo(x,C.pT);ctx.lineTo(x,vh-C.pB);ctx.stroke();ctx.setLineDash([]);
+    const my=C.pT+10;ctx.fillStyle=cv('--chart-insulin-fill');ctx.beginPath();ctx.moveTo(x,my+18);ctx.lineTo(x-8,my);ctx.lineTo(x+8,my);ctx.closePath();ctx.fill();
+    ctx.fillStyle='#fff';ctx.font='700 9px "JetBrains Mono"';ctx.textAlign='center';ctx.fillText(r.dose,x,my+12);ctx.textAlign='start';
+    C.hitTargets.push({type:'insulin',x,y:my+9,r:12,data:r});
+  }
+}
+
+function drawMemo(ctx,vh,left,right){
+  const C=APP.chart;
+  for(const r of APP.data.memo){
+    if(r.timestamp<left||r.timestamp>right)continue;const x=tsX(r.timestamp),my=vh-C.pB-18;
+    ctx.fillStyle=cv('--chart-memo-fill');ctx.beginPath();ctx.arc(x,my,7,0,Math.PI*2);ctx.fill();
+    ctx.fillStyle='#fff';ctx.font='500 9px sans-serif';ctx.textAlign='center';ctx.fillText('✎',x,my+3);ctx.textAlign='start';
+    C.hitTargets.push({type:'memo',x,y:my,r:12,data:r});
+  }
+}
+
+function drawYAxis(ctx,vw,vh){
+  const C=APP.chart;ctx.fillStyle=cv('--chart-yaxis-bg');ctx.fillRect(0,0,C.pL,vh);
+  ctx.fillStyle=cv('--chart-text-strong');ctx.font='400 10px "JetBrains Mono"';ctx.textAlign='right';
+  for(let v=50;v<=500;v+=50)ctx.fillText(v===500?'HI':String(v),C.pL-8,valY(v)+3);
+  ctx.textAlign='start';ctx.strokeStyle=cv('--chart-grid-strong');ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(C.pL,C.pT);ctx.lineTo(C.pL,vh-C.pB);ctx.stroke();
+}
+
+// Chart interaction
+function setupChartEvents(){
+  const C=APP.chart,vp=C.viewport;
+  vp.addEventListener('pointerdown',e=>{C.isDragging=true;C.dragStartX=e.clientX;C.dragStartOffset=C.scrollOffset;vp.setPointerCapture(e.pointerId)});
+  vp.addEventListener('pointermove',e=>{
+    if(C.isDragging){const dx=e.clientX-C.dragStartX;C.scrollOffset=Math.max(0,C.dragStartOffset+dx*C.msPerPixel);lazyLoad();drawChart()}
+    else showTT(e);
+  });
+  vp.addEventListener('pointerup',()=>{C.isDragging=false});
+  vp.addEventListener('wheel',e=>{e.preventDefault();C.scrollOffset=Math.max(0,C.scrollOffset+(e.deltaX+e.deltaY)*C.msPerPixel);lazyLoad();drawChart()},{passive:false});
+  vp.addEventListener('click',e=>showTT(e));
+  vp.addEventListener('pointerleave',()=>{document.getElementById('chartTooltip').style.display='none'});
+}
+
+function showTT(e){
+  const C=APP.chart,rect=C.canvas.getBoundingClientRect();
+  const mx=(e.clientX-rect.left)*(C.viewport.clientWidth/rect.width);
+  const my=(e.clientY-rect.top)*(C.viewport.clientHeight/rect.height);
+  const tt=document.getElementById('chartTooltip');
+  let best=null,bd=Infinity;
+  for(const h of C.hitTargets){const d=Math.sqrt((mx-h.x)**2+(my-h.y)**2);if(d<h.r&&d<bd){bd=d;best=h}}
+  if(!best)for(const h of C.hitTargets){if(h.type==='glucose'&&Math.abs(mx-h.x)<15&&Math.abs(mx-h.x)<bd){bd=Math.abs(mx-h.x);best=h}}
+  if(!best){tt.style.display='none';return}
+  let data={};
+  if(best.type==='glucose'){const p=best.data,ds=gDisp(p.value,p.isHi);data={time:fmtDT(p.timestamp),label:ds==='HI'?'HI (≥500 mg/dL)':p.value+' mg/dL',color:gColor(p.value,p.isHi)}}
+  else if(best.type==='insulin')data={time:fmtDT(best.data.timestamp),label:'💉 インスリン: '+best.data.dose};
+  else if(best.type==='memo')data={time:fmtDT(best.data.timestamp),label:'📝 メモ',memo:best.data.text};
+  tt.style.display='block';tt.style.left=(e.clientX+15)+'px';tt.style.top=(e.clientY-10)+'px';
+  tt.querySelector('.tt-time').textContent=data.time||'';const vl=tt.querySelector('.tt-value');vl.textContent=data.label||'';vl.style.color=data.color||cv('--text-primary');
+  tt.querySelector('.tt-memo').textContent=data.memo||'';
+  requestAnimationFrame(()=>{const r=tt.getBoundingClientRect();if(r.right>window.innerWidth)tt.style.left=(e.clientX-r.width-15)+'px';if(r.bottom>window.innerHeight)tt.style.top=(e.clientY-r.height-10)+'px'});
+}
+
+let _llt=null;
+function lazyLoad(){
+  if(APP.mode!=='firebase')return;clearTimeout(_llt);
+  _llt=setTimeout(async()=>{const{left}=visRange();const buf=RANGE_H[APP.chart.currentRange]*3600000;const need=left-buf;if(need<APP.loadedUntil){await ensureLoaded(need,APP.loadedUntil);drawChart()}},200);
+}
+
+// UI Setup
+function setupUI(){
+  document.querySelectorAll('.input-tab').forEach(tab=>{tab.addEventListener('click',()=>{document.querySelectorAll('.input-tab').forEach(t=>t.classList.remove('active'));document.querySelectorAll('.input-panel').forEach(p=>p.classList.remove('active'));tab.classList.add('active');document.getElementById('panel-'+tab.dataset.tab).classList.add('active')})});
+  const now=nowISO();['glucoseTime','insulinTime','memoTime','gapStart','gapEnd'].forEach(id=>{document.getElementById(id).value=now});
+  document.getElementById('glucoseIsHi').addEventListener('change',e=>{const v=document.getElementById('glucoseValue');if(e.target.checked){v.value=500;v.disabled=true}else{v.value='';v.disabled=false}});
+  document.getElementById('btnAddGlucose').addEventListener('click',async()=>{const ts=new Date(document.getElementById('glucoseTime').value).getTime();const hi=document.getElementById('glucoseIsHi').checked;const val=hi?500:parseInt(document.getElementById('glucoseValue').value);if(!ts||(!hi&&(isNaN(val)||val<0))){toast('入力を確認してください','error');return}await addRec('glucose',{timestamp:ts,value:val,isHi:hi});toast('血糖値を記録','success');document.getElementById('glucoseValue').value='';document.getElementById('glucoseIsHi').checked=false;document.getElementById('glucoseValue').disabled=false;document.getElementById('glucoseTime').value=nowISO();refresh()});
+  document.getElementById('btnAddInsulin').addEventListener('click',async()=>{const ts=new Date(document.getElementById('insulinTime').value).getTime();const dose=parseFloat(document.getElementById('insulinDose').value);if(!ts||isNaN(dose)||dose<=0){toast('入力を確認してください','error');return}await addRec('insulin',{timestamp:ts,dose});toast('インスリンを記録','success');document.getElementById('insulinDose').value='';document.getElementById('insulinTime').value=nowISO();refresh()});
+  document.getElementById('btnAddMemo').addEventListener('click',async()=>{const ts=new Date(document.getElementById('memoTime').value).getTime();const txt=document.getElementById('memoText').value.trim();if(!ts||!txt){toast('入力を確認してください','error');return}await addRec('memo',{timestamp:ts,text:txt});toast('メモを記録','success');document.getElementById('memoText').value='';document.getElementById('memoTime').value=nowISO();refresh()});
+  document.getElementById('btnAddGap').addEventListener('click',async()=>{const s=new Date(document.getElementById('gapStart').value).getTime();const e=new Date(document.getElementById('gapEnd').value).getTime();if(!s||!e||e<=s){toast('入力を確認してください','error');return}await addRec('gap',{timestamp:s,startTs:s,endTs:e});toast('欠損区間を記録','success');document.getElementById('gapStart').value=nowISO();document.getElementById('gapEnd').value=nowISO();refresh()});
+  document.querySelectorAll('.chart-controls button[data-range]').forEach(btn=>{btn.addEventListener('click',async()=>{document.querySelectorAll('.chart-controls button[data-range]').forEach(b=>b.classList.remove('active'));btn.classList.add('active');APP.chart.currentRange=btn.dataset.range;APP.chart.scrollOffset=0;updateMPP();const{left,right}=visRange();await ensureLoaded(left,right);drawChart()})});
+  document.getElementById('btnGoLatest').addEventListener('click',()=>{APP.chart.scrollOffset=0;drawChart()});
+  document.getElementById('btnRefreshRecords').addEventListener('click',refresh);
+  document.getElementById('btnSaveConfig').addEventListener('click',async()=>{const cfg={apiKey:document.getElementById('cfgApiKey').value.trim(),authDomain:document.getElementById('cfgAuthDomain').value.trim(),projectId:document.getElementById('cfgProjectId').value.trim()};if(!cfg.apiKey||!cfg.projectId){toast('API KeyとProject IDは必須','error');return}try{await initFB(cfg);saveCfg(cfg);document.getElementById('setupOverlay').classList.add('hidden');startApp()}catch(e){toast('接続失敗: '+e.message,'error')}});
+  document.getElementById('btnSkipConfig').addEventListener('click',()=>{APP.mode='json';document.getElementById('setupOverlay').classList.add('hidden');document.getElementById('authStatus').textContent='JSONモード (読み取り専用)';hideInputUI();startApp()});
+}
+
+function hideInputUI(){document.querySelector('.input-section').style.display='none'}
+function refresh(){updateStats();drawChart();renderList()}
+
+async function startApp(){
+  if(APP.mode==='json')await loadJSON();
+  if(APP.mode==='firebase'){const{left,right}=visRange();await ensureLoaded(left,right);await ensureLoaded(Date.now()-86400000,Date.now())}
+  initChart();refresh();
+}
+
+function renderList(){
+  const list=document.getElementById('recordList'),all=[];
+  APP.data.glucose.forEach(r=>all.push({type:'glucose',...r}));APP.data.insulin.forEach(r=>all.push({type:'insulin',...r}));
+  APP.data.memo.forEach(r=>all.push({type:'memo',...r}));APP.data.gap.forEach(r=>all.push({type:'gap',...r}));
+  all.sort((a,b)=>b.timestamp-a.timestamp);const recent=all.slice(0,50);
+  if(!recent.length){list.innerHTML='<div class="empty-state">データがありません</div>';return}
+  list.innerHTML=recent.map(r=>{
+    let b='',d='';
+    if(r.type==='glucose'){b='<span class="record-type-badge glucose">血糖値</span>';const ds=gDisp(r.value,r.isHi);d='<span class="record-value" style="color:'+gColor(r.value,r.isHi)+'">'+ds+'</span>'}
+    else if(r.type==='insulin'){b='<span class="record-type-badge insulin">インスリン</span>';d='<span class="record-value" style="color:var(--accent-orange)">'+r.dose+'</span>'}
+    else if(r.type==='memo'){b='<span class="record-type-badge memo">メモ</span>';d='<span class="record-memo-text">'+esc(r.text)+'</span>'}
+    else if(r.type==='gap'){b='<span class="record-type-badge gap">欠損</span>';d='<span class="record-memo-text">'+fmtDT(r.startTs)+' 〜 '+fmtDT(r.endTs)+'</span>'}
+    const delBtn=APP.mode==='json'?'':'<button class="record-delete" onclick="handleDel(\''+r.type+'\',\''+r.id+'\')" title="削除">✕</button>';
+    return '<div class="record-item"><div>'+b+'</div><span class="record-time">'+fmtDT(r.timestamp)+'</span>'+d+delBtn+'</div>'
+  }).join('');
+}
+async function handleDel(t,id){if(!confirm('この記録を削除しますか？'))return;try{await delRec(t,id);toast('削除しました','success');refresh()}catch{toast('削除エラー','error')}}
+
+document.addEventListener('DOMContentLoaded',()=>{
+  initTheme();setupUI();
+  // Priority: hardcoded config > localStorage config > show setup
+  const hc=FIREBASE_CONFIG;
+  const cfg=hc.apiKey?hc:loadCfg();
+  if(cfg&&cfg.apiKey){
+    initFB(cfg).then(()=>{document.getElementById('setupOverlay').classList.add('hidden');startApp()}).catch(()=>{});
+  }
+});
+</script>
+</body>
+</html>
