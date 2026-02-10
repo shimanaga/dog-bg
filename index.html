@@ -239,7 +239,7 @@ function isPermissionDenied(err){
 function hidePermissionPopup(){
   const ov=document.getElementById('permOverlay');
   if(!ov)return;
-  if(ov.dataset.locked==='1') return; // 読み取り権限不足などでロック中は閉じない
+  if(ov.dataset.locked==='1') return; 
   ov.classList.add('hidden');
   ov.setAttribute('aria-hidden','true');
 }
@@ -261,11 +261,11 @@ function showPermissionPopup(err, opts={}){
   const hintEl=document.getElementById('permHint');
 
   if(mode==='read'){
-    msgEl.textContent='データの読み取りに必要な権限がありません。Firestore のセキュリティルール（または管理者設定）で、この UID に読み取り権限を付与してください。';
-    if(hintEl) hintEl.textContent='このUIDを管理者に共有して、読み取り権限を付与してもらってください。';
+    msgEl.textContent='データの読み取りに必要な権限がありません。';
+    if(hintEl) hintEl.textContent='このUIDを管理者に共有してください。';
   }else{
-    msgEl.textContent='データの保存に必要な権限がありません。Firestore のセキュリティルール（または管理者設定）で、この UID に書き込み権限を付与してください。';
-    if(hintEl) hintEl.textContent='このUIDを管理者に共有して、書き込み権限を付与してもらってください。';
+    msgEl.textContent='データの保存に必要な権限がありません。';
+    if(hintEl) hintEl.textContent='このUIDを管理者に共有してください。';
   }
 
   const detail=document.getElementById('permDetail');
@@ -801,6 +801,7 @@ async function startApp(){
   try{
     if(APP.mode==='json') await loadJSON();
     if(APP.mode==='firebase'){
+      // 初回ロードの終端を「今」に合わせる（認証に数秒かかっても取りこぼさない）
       const empty = !APP.data.glucose.length && !APP.data.insulin.length && !APP.data.memo.length && !APP.data.gap.length;
       if(empty) APP.loadedUntil = Date.now();
       const {left,right}=visRange();
