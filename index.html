@@ -135,7 +135,7 @@ canvas#glucoseChart{display:block;width:100%;height:100%}
   <div class="input-section">
     <div class="input-tabs">
       <button class="input-tab active" data-tab="glucose">血糖値</button>
-      <button class="input-tab" data-tab="insulin">投与</button>
+      <button class="input-tab" data-tab="insulin">インスリン</button>
       <button class="input-tab" data-tab="memo">メモ</button>
       <button class="input-tab" data-tab="gap">欠損区間</button>
     </div>
@@ -146,6 +146,7 @@ canvas#glucoseChart{display:block;width:100%;height:100%}
         <button class="btn" id="btnAddGlucose">記録</button>
       </div>
       <div class="checkbox-row"><input type="checkbox" id="glucoseIsHi"><label for="glucoseIsHi">HI (500超) として記録</label></div>
+      <div class="checkbox-row"><input type="checkbox" id="glucoseMinus20"><label for="glucoseMinus20">20分前の数値として記録（手動計測の場合必須）</label></div>
     </div>
     <div class="input-panel" id="panel-insulin">
       <div class="form-row">
@@ -156,7 +157,7 @@ canvas#glucoseChart{display:block;width:100%;height:100%}
     </div>
     <div class="input-panel" id="panel-memo">
       <div class="form-row"><div class="form-group"><label>日時</label><input type="datetime-local" id="memoTime" step="60"></div></div>
-      <div class="form-row"><div class="form-group"><label>メモ内容</label><textarea id="memoText" placeholder="食事、体調などを記録..."></textarea></div></div>
+      <div class="form-row"><div class="form-group"><label>メモ内容</label><textarea id="memoText" placeholder="食事、体調、運動など自由に記録..."></textarea></div></div>
       <div class="form-row"><button class="btn" id="btnAddMemo">記録</button></div>
     </div>
     <div class="input-panel" id="panel-gap">
@@ -165,7 +166,7 @@ canvas#glucoseChart{display:block;width:100%;height:100%}
         <div class="form-group"><label>欠損終了</label><input type="datetime-local" id="gapEnd" step="60"></div>
         <button class="btn" id="btnAddGap">記録</button>
       </div>
-      <p class="form-hint">センサーデータの欠損区間を登録します。</p>
+      <p class="form-hint">センサーデータの欠損区間を登録します。グラフ上で線が途切れて表示されます。</p>
     </div>
   </div>
   <div class="records-section">
@@ -198,7 +199,7 @@ canvas#glucoseChart{display:block;width:100%;height:100%}
     <div class="form-group" style="margin-top:1rem">
       <label>UID</label>
       <input type="text" id="permUid" readonly>
-      <div class="form-hint">このUIDを管理者に共有してください。</div>
+      <div class="form-hint">このUIDを管理者に共有して、書き込み権限を付与してもらってください。</div>
     </div>
     <div style="display:flex;gap:.5rem;justify-content:flex-end;margin-top:1rem">
       <button class="btn btn-secondary" id="btnCopyUid" type="button">UIDをコピー</button>
@@ -607,7 +608,7 @@ function showTT(e){
   if(!best){tt.style.display='none';return}
   let data={};
   if(best.type==='glucose'){const p=best.data,ds=gDisp(p.value,p.isHi);data={time:fmtDT(p.timestamp),label:ds==='HI'?'HI (≥500 mg/dL)':p.value+' mg/dL',color:gColor(p.value,p.isHi)}}
-  else if(best.type==='insulin')data={time:fmtDT(best.data.timestamp),label:'💉 投与: '+best.data.dose};
+  else if(best.type==='insulin')data={time:fmtDT(best.data.timestamp),label:'💉 インスリン: '+best.data.dose};
   else if(best.type==='memo')data={time:fmtDT(best.data.timestamp),label:'📝 メモ',memo:best.data.text};
   tt.style.display='block';tt.style.left=(e.clientX+15)+'px';tt.style.top=(e.clientY-10)+'px';
   tt.querySelector('.tt-time').textContent=data.time||'';const vl=tt.querySelector('.tt-value');vl.textContent=data.label||'';vl.style.color=data.color||cv('--text-primary');
@@ -627,7 +628,9 @@ function setupUI(){
   const now=nowISO();['glucoseTime','insulinTime','memoTime','gapStart','gapEnd'].forEach(id=>{document.getElementById(id).value=now});
   document.getElementById('glucoseIsHi').addEventListener('change',e=>{const v=document.getElementById('glucoseValue');if(e.target.checked){v.value=500;v.disabled=true}else{v.value='';v.disabled=false}});
   document.getElementById('btnAddGlucose').addEventListener('click',async()=>{
-    const ts=new Date(document.getElementById('glucoseTime').value).getTime();
+    let ts=new Date(document.getElementById('glucoseTime').value).getTime();
+    const minus20=document.getElementById('glucoseMinus20')?.checked;
+    if(minus20) ts-=20*60*1000;
     const hi=document.getElementById('glucoseIsHi').checked;
     const val=hi?500:parseInt(document.getElementById('glucoseValue').value);
     if(!ts||(!hi&&(isNaN(val)||val<0))){toast('入力を確認してください','error');return}
@@ -638,6 +641,7 @@ function setupUI(){
     document.getElementById('glucoseValue').value='';
     document.getElementById('glucoseIsHi').checked=false;
     document.getElementById('glucoseValue').disabled=false;
+    if(document.getElementById('glucoseMinus20')) document.getElementById('glucoseMinus20').checked=false;
     document.getElementById('glucoseTime').value=nowISO();
     refresh();
   });
@@ -648,7 +652,7 @@ function setupUI(){
     try{
       await addRec('insulin',{timestamp:ts,dose});
     }catch(e){return}
-    toast('投与を記録しました','success');
+    toast('インスリンを記録しました','success');
     document.getElementById('insulinDose').value='';
     document.getElementById('insulinTime').value=nowISO();
     refresh();
@@ -738,7 +742,7 @@ function renderList(){
   list.innerHTML=recent.map(r=>{
     let b='',d='';
     if(r.type==='glucose'){b='<span class="record-type-badge glucose">血糖値</span>';const ds=gDisp(r.value,r.isHi);d='<span class="record-value" style="color:'+gColor(r.value,r.isHi)+'">'+ds+'</span>'}
-    else if(r.type==='insulin'){b='<span class="record-type-badge insulin">投与</span>';d='<span class="record-value" style="color:var(--accent-orange)">'+r.dose+'</span>'}
+    else if(r.type==='insulin'){b='<span class="record-type-badge insulin">インスリン</span>';d='<span class="record-value" style="color:var(--accent-orange)">'+r.dose+'</span>'}
     else if(r.type==='memo'){b='<span class="record-type-badge memo">メモ</span>';d='<span class="record-memo-text">'+esc(r.text)+'</span>'}
     else if(r.type==='gap'){b='<span class="record-type-badge gap">欠損</span>';d='<span class="record-memo-text">'+fmtDT(r.startTs)+' 〜 '+fmtDT(r.endTs)+'</span>'}
     const delBtn=APP.mode==='json'?'':'<button class="record-delete" onclick="handleDel(\''+r.type+'\',\''+r.id+'\')" title="削除">✕</button>';
