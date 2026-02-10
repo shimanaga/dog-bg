@@ -120,10 +120,10 @@ canvas#glucoseChart{display:block;width:100%;height:100%}
     <div class="chart-header">
       <div class="chart-title">血糖値推移</div>
       <div class="chart-controls">
+        <button data-range="3h">3h</button>
         <button data-range="24h" class="active">24h</button>
         <button data-range="3d">3日</button>
         <button data-range="7d">7日</button>
-        <button data-range="30d">30日</button>
         <button id="btnGoLatest" title="最新へ">→ 最新</button>
       </div>
     </div>
@@ -226,7 +226,7 @@ const FIREBASE_CONFIG = {
 // ==================================
 
 const APP={mode:null,db:null,auth:null,uid:null,readDenied:false,data:{glucose:[],insulin:[],memo:[],gap:[]},loadedUntil:Date.now(),chart:{canvas:null,ctx:null,viewport:null,scrollOffset:0,msPerPixel:0,isDragging:false,dragStartX:0,dragStartOffset:0,currentRange:'24h',yMin:40,yMax:520,pT:30,pB:40,pL:55,pR:15,hitTargets:[]}};
-const RANGE_H={'24h':24,'3d':72,'7d':168,'30d':720};
+const RANGE_H={'3h':3,'24h':24,'3d':72,'7d':168};
 
 // Utils
 function toast(m,t='info'){const e=document.createElement('div');e.className='toast '+t;e.textContent=m;document.getElementById('toastContainer').appendChild(e);setTimeout(()=>e.remove(),3500)}
