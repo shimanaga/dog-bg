@@ -56,7 +56,7 @@ def fetch_glucose_data() -> list:
     print(f"Patient: {patient.first_name} {patient.last_name}")
 
     # グラフデータ（直近12-24時間、15分間隔）
-    graph_data = api.get_graph_data(patient)
+    graph_data = api._get_graph_data_json(patient)
 
     # Logbook（より長期の履歴、スキャン時の値）
     logbook = api.get_logbook(patient)
