@@ -99,12 +99,14 @@ canvas#glucoseChart{display:block;width:100%;height:100%}
 @keyframes toastin{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
 ::-webkit-scrollbar{width:6px;height:6px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:var(--border-color);border-radius:3px}
 @media(max-width:600px){html{font-size:14px}.app-container{padding:1rem .5rem}.chart-viewport{height:300px}.stats-bar{grid-template-columns:repeat(2,1fr)}header{flex-direction:column;align-items:flex-start;gap:.5rem}.header-right{align-self:flex-end}.form-row{flex-direction:column}.form-group{min-width:100%}}
+#importText,#importPreview{font-family:var(--font-mono);min-height:140px}
+#importPreview{opacity:.95}
 </style>
 </head>
 <body>
 <div class="app-container">
   <header>
-    <h1>血糖値モニター</h1>
+    <h1>　血糖値モニター</h1>
     <div class="header-right">
       <div class="auth-status" id="authStatus">未接続</div>
       <button class="theme-toggle" id="themeToggle" title="テーマ切替">🌙</button>
@@ -140,6 +142,7 @@ canvas#glucoseChart{display:block;width:100%;height:100%}
       <button class="input-tab" data-tab="insulin">投与</button>
       <button class="input-tab" data-tab="memo">メモ</button>
       <button class="input-tab" data-tab="gap">欠損区間</button>
+      <button class="input-tab" data-tab="import">一括インポート</button>
     </div>
     <div class="input-panel active" id="panel-glucose">
       <div class="form-row">
@@ -149,6 +152,28 @@ canvas#glucoseChart{display:block;width:100%;height:100%}
       </div>
       <div class="checkbox-row"><input type="checkbox" id="glucoseIsHi"><label for="glucoseIsHi">HI (500超) として記録</label></div>
       <div class="checkbox-row"><input type="checkbox" id="glucoseMinus20"><label for="glucoseMinus20">20分前の数値として記録（手動計測の場合必須）</label></div>
+    </div>
+        <div class="input-panel" id="panel-import">
+      <div class="form-row">
+        <div class="form-group">
+          <label>入力</label>
+          <textarea id="importText" placeholder="2026-02-11 14:24 369
+2026-02-11 15:05 322
+2026-02-12 00:22 HI"></textarea>
+          <div class="form-hint">入力形式: <b>YYYY-MM-DD HH:MM 値</b></div>
+        </div>
+      </div>
+<div class="form-row">
+  <button class="btn btn-secondary" id="btnImportPreview" type="button">検証（プレビュー）</button>
+  <button class="btn" id="btnImportCommit" type="button" disabled>インポート</button>
+</div>
+<div class="form-row">
+        <div class="form-group">
+          <label>プレビュー</label>
+          <textarea id="importPreview" readonly placeholder="解析結果"></textarea>
+          <div class="form-hint" id="importSummary">未解析</div>
+        </div>
+      </div>
     </div>
     <div class="input-panel" id="panel-insulin">
       <div class="form-row">
@@ -296,6 +321,137 @@ function fmtDate(ts){const d=new Date(ts);return`${d.getFullYear()}/${String(d.g
 function nowISO(){const d=new Date();d.setMinutes(d.getMinutes()-d.getTimezoneOffset());return d.toISOString().slice(0,16)}
 function gDisp(v,hi){return(hi||v>=500)?'HI':String(v)}
 function gColor(v,hi){if(hi||v>=500)return'#dc2626';if(v>=70&&v<=180)return'#16a34a';if(v>180&&v<300)return'#d97706';return'#dc2626'}
+// ====== Bulk Import (glucose) ======
+APP.importer={rows:[],errors:[]};
+
+function parseDateLike(line){
+  const m=line.match(/(\d{4})[\/\-\.\年](\d{1,2})[\/\-\.\月](\d{1,2})/);
+  if(!m) return null;
+  const y=parseInt(m[1],10),mo=parseInt(m[2],10),d=parseInt(m[3],10);
+  if(!y||!mo||!d) return null;
+  return {y,mo,d};
+}
+function parseTimeLike(line){
+  const m=line.match(/(\d{1,2}):(\d{2})/);
+  if(!m) return null;
+  const hh=parseInt(m[1],10),mm=parseInt(m[2],10);
+  if(hh<0||hh>23||mm<0||mm>59) return null;
+  return {hh,mm};
+}
+function parseValueLike(line){
+  const tmp=line
+    .replace(/(\d{4})[\/\-\.\年](\d{1,2})[\/\-\.\月](\d{1,2})/g,' ')
+    .replace(/(\d{1,2}):(\d{2})/g,' ');
+  if(/\bHI\b/i.test(tmp) || /血糖値\s*HI/i.test(line)) return {value:500,isHi:true};
+  const nums=tmp.match(/-?\d{2,3}/g);
+  if(!nums||!nums.length) return null;
+  const v=parseInt(nums[nums.length-1],10);
+  if(!Number.isFinite(v)) return null;
+  return {value:Math.max(0,Math.min(999,v)),isHi:false};
+}
+function buildTimestampFromParts(dateObj,timeObj){
+  const dt=new Date(dateObj.y, dateObj.mo-1, dateObj.d, timeObj.hh, timeObj.mm, 0, 0);
+  return dt.getTime();
+}
+function getImportRef(){
+  const dEl=document.getElementById('importRefDate');
+  const tEl=document.getElementById('importRefTime');
+  const wrap=document.getElementById('importWrapPrevDay')?.checked;
+  const dStr=(dEl&&dEl.value)?dEl.value:null;
+  const tStr=(tEl&&tEl.value)?tEl.value:null;
+  const now=new Date();
+  const refDate = dStr ? new Date(dStr+'T00:00:00') : new Date(now.getFullYear(),now.getMonth(),now.getDate());
+  const refTime = tStr ? tStr : (String(now.getHours()).padStart(2,'0')+':'+String(now.getMinutes()).padStart(2,'0'));
+  const [rh,rm]=refTime.split(':').map(n=>parseInt(n,10));
+  const refMin = (rh*60+rm);
+  return {refDate,refMin,wrap};
+}
+function inferDateForTime(hh,mm,ref){
+  const d=new Date(ref.refDate.getTime());
+  const tMin=hh*60+mm;
+  if(ref.wrap && tMin>ref.refMin) d.setDate(d.getDate()-1);
+  return {y:d.getFullYear(),mo:d.getMonth()+1,d:d.getDate()};
+}
+function parseImportText(text){
+  // Strict format only: YYYY-MM-DD HH:MM VALUE (VALUE = integer or HI)
+  const lines=String(text||'').split(/\r?\n/);
+  const rows=[]; const errors=[];
+  const reLine=/^(\d{4})-(\d{2})-(\d{2})\s+(\d{1,2}):(\d{2})\s+(HI|hi|\d{1,3})\s*$/;
+
+  for(let i=0;i<lines.length;i++){
+    const raw=lines[i];
+    const line=raw.trim();
+    if(!line) continue;
+
+    const m=line.match(reLine);
+    if(!m){
+      errors.push({lineNo:i+1,line:raw,reason:'形式が違う（YYYY-MM-DD HH:MM 値 のみ対応）'});
+      continue;
+    }
+    const yyyy=Number(m[1]), mm=Number(m[2]), dd=Number(m[3]);
+    const hh=Number(m[4]), mi=Number(m[5]);
+    const vRaw=m[6];
+    const isHi=String(vRaw).toUpperCase()==='HI';
+    const value=isHi?500:Number(vRaw);
+
+    if(!(yyyy>=1970 && yyyy<=2100 && mm>=1 && mm<=12 && dd>=1 && dd<=31 && hh>=0 && hh<=23 && mi>=0 && mi<=59)){
+      errors.push({lineNo:i+1,line:raw,reason:'日付/時刻が不正'});
+      continue;
+    }
+    if(!isHi && !(value>=0 && value<=999)){
+      errors.push({lineNo:i+1,line:raw,reason:'値が不正（0〜999 か HI）'});
+      continue;
+    }
+    const ts=new Date(yyyy, mm-1, dd, hh, mi, 0, 0).getTime();
+    rows.push({timestamp:ts,value:value,isHi:isHi,src:raw,lineNo:i+1});
+  }
+
+  // sort & de-dup within pasted data (same minute + same value)
+  rows.sort((a,b)=>a.timestamp-b.timestamp);
+  const uniq=[];
+  const seen=new Set();
+  for(const r of rows){
+    const key=Math.round(r.timestamp/60000)+'|'+(r.isHi?1:0)+'|'+r.value;
+    if(seen.has(key)) continue;
+    seen.add(key);
+    uniq.push(r);
+  }
+  return {rows:uniq,errors};
+}
+
+async function commitImportRows(rows){
+  if(APP.mode!=='firebase'){
+    toast('Firebase接続時のみインポートできます','error');
+    return;
+  }
+  const existing=new Set(APP.data.glucose.map(r=> (Math.round(r.timestamp/60000)+'|'+(r.isHi?1:0)+'|'+r.value) ));
+  const col=APP.db.collection('glucose');
+  const batch=APP.db.batch();
+  const toAdd=[];
+  let skipped=0;
+  for(const r of rows){
+    const key=Math.round(r.timestamp/60000)+'|'+(r.isHi?1:0)+'|'+r.value;
+    if(existing.has(key)){skipped++; continue;}
+    const ref=col.doc();
+    batch.set(ref,{timestamp:r.timestamp,value:r.value,isHi:r.isHi});
+    toAdd.push({...r,id:ref.id});
+  }
+  if(!toAdd.length){
+    toast(skipped?('既存と重複のため追加なし（'+skipped+'件スキップ）'):'追加対象がありません','info');
+    return;
+  }
+  try{
+    await batch.commit();
+    for(const r of toAdd) APP.data.glucose.push(r);
+    APP.data.glucose.sort((a,b)=>a.timestamp-b.timestamp);
+    toast('インポート完了: '+toAdd.length+'件（'+skipped+'件スキップ）','success');
+    refresh();
+  }catch(e){
+    handleWriteError(e);
+  }
+}
+// ==============================
+
 function statCls(v){if(v==null)return'muted';if(v>=70&&v<=180)return'normal';if(v>180&&v<300)return'warning';return'danger'}
 function esc(s){const d=document.createElement('div');d.textContent=s;return d.innerHTML}
 function cv(n){return getComputedStyle(document.documentElement).getPropertyValue(n).trim()}
@@ -670,7 +826,7 @@ function setupChartEvents(){
     else showTT(e);
   });
   vp.addEventListener('pointerup',()=>{C.isDragging=false});
-  vp.addEventListener('wheel',e=>{e.preventDefault();C.scrollOffset=Math.max(0,C.scrollOffset+(e.deltaX+e.deltaY)*C.msPerPixel);lazyLoad();drawChart()},{passive:false});
+  vp.addEventListener('wheel',e=>{e.preventDefault();C.scrollOffset=Math.max(0,C.scrollOffset-(e.deltaX+e.deltaY)*C.msPerPixel);lazyLoad();drawChart()},{passive:false});
   vp.addEventListener('click',e=>showTT(e));
   vp.addEventListener('pointerleave',()=>{document.getElementById('chartTooltip').style.display='none'});
 }
@@ -764,6 +920,57 @@ function setupUI(){
   document.getElementById('btnRefreshRecords').addEventListener('click',refresh);
   document.getElementById('btnSaveConfig').addEventListener('click',async()=>{const cfg={apiKey:document.getElementById('cfgApiKey').value.trim(),authDomain:document.getElementById('cfgAuthDomain').value.trim(),projectId:document.getElementById('cfgProjectId').value.trim()};if(!cfg.apiKey||!cfg.projectId){toast('API KeyとProject IDは必須','error');return}try{await initFB(cfg);saveCfg(cfg);document.getElementById('setupOverlay').classList.add('hidden');await startApp()}catch(e){toast('接続失敗: '+e.message,'error')}});
   document.getElementById('btnSkipConfig').addEventListener('click',()=>{APP.mode='json';document.getElementById('setupOverlay').classList.add('hidden');document.getElementById('authStatus').textContent='JSONモード (読み取り専用)';hideInputUI();startApp().catch(console.error)});
+
+  
+  // Bulk import UI (strict: YYYY-MM-DD HH:MM 値)
+  const btnPrev=document.getElementById('btnImportPreview');
+  const btnCommit=document.getElementById('btnImportCommit');
+  const txtEl=document.getElementById('importText');
+  const pvEl=document.getElementById('importPreview');
+  const sumEl=document.getElementById('importSummary');
+
+  function renderImportPreview(parsed){
+    APP.importer=parsed;
+    const rows=parsed.rows||[];
+    const errs=parsed.errors||[];
+    if(pvEl){
+      const lines=rows.map(r=>{
+        const d=new Date(r.timestamp);
+        const y=d.getFullYear(),mo=String(d.getMonth()+1).padStart(2,'0'),da=String(d.getDate()).padStart(2,'0');
+        const hh=String(d.getHours()).padStart(2,'0'),mm=String(d.getMinutes()).padStart(2,'0');
+        const v=r.isHi?'HI':String(r.value);
+        return `${y}-${mo}-${da} ${hh}:${mm} ${v}`;
+      });
+      const errLines=errs.map(e=>`# L${e.lineNo}: ${e.reason} :: ${e.line}`);
+      pvEl.value = (lines.concat(errLines)).join('\n');
+    }
+    if(sumEl){
+      sumEl.textContent = `解析: ${rows.length}件 / エラー: ${errs.length}件`;
+    }
+    if(btnCommit){
+      btnCommit.disabled = !(rows.length>0 && errs.length===0);
+    }
+  }
+
+  if(btnPrev){
+    btnPrev.addEventListener('click',()=>{
+      const parsed=parseImportText(txtEl?txtEl.value:'');
+      renderImportPreview(parsed);
+      if(parsed.errors.length){
+        toast('解析エラーがあります（プレビュー末尾を確認）','error');
+      }else{
+        toast('解析しました（プレビュー確認後にインポート）','success');
+      }
+    });
+  }
+  if(btnCommit){
+    btnCommit.addEventListener('click',async()=>{
+      if(!APP.importer||!APP.importer.rows||!APP.importer.rows.length){toast('解析してからインポートしてください','error');return}
+      if(APP.importer.errors&&APP.importer.errors.length){toast('エラー行があるためインポートできません','error');return}
+      await commitImportRows(APP.importer.rows);
+      // keep text for re-import; user can clear manually
+    });
+  }
 
   // Permission popup
   const permOv=document.getElementById('permOverlay');
