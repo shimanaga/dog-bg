@@ -1,0 +1,28 @@
+name: Fetch Glucose Data
+
+on:
+  schedule:
+    # 15分ごとに実行（UTC表記）
+    - cron: '*/15 * * * *'
+  workflow_dispatch:
+    # GitHubのActions画面から手動実行も可能
+
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        run: pip install pylibrelinkup firebase-admin
+
+      - name: Fetch glucose data and write to Firebase
+        run: python scripts/fetch_glucose.py
+        env:
+          LIBRELINK_EMAIL: ${{ secrets.LIBRELINK_EMAIL }}
+          LIBRELINK_PASSWORD: ${{ secrets.LIBRELINK_PASSWORD }}
+          FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
