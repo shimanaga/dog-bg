@@ -7,18 +7,16 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
-:root{--bg-primary:#f5f6f8;--bg-card:#fff;--bg-card-hover:#f9fafb;--bg-input:#f0f2f5;--border-color:#dfe3ea;--border-focus:#4a9eff;--text-primary:#1a2233;--text-secondary:#5a6678;--text-muted:#8c95a6;--accent-blue:#3b82f6;--accent-blue-dim:rgba(59,130,246,.1);--accent-green:#16a34a;--accent-green-dim:rgba(22,163,74,.08);--accent-orange:#d97706;--accent-orange-dim:rgba(217,119,6,.1);--accent-red:#dc2626;--accent-red-dim:rgba(220,38,38,.08);--accent-purple:#7c3aed;--accent-purple-dim:rgba(124,58,237,.08);--chart-bg:#fff;--chart-grid:rgba(0,0,0,.05);--chart-grid-strong:rgba(0,0,0,.12);--chart-text:rgba(0,0,0,.35);--chart-text-strong:rgba(0,0,0,.55);--chart-glucose:#3b82f6;--chart-normal-fill:rgba(22,163,74,.05);--chart-normal-border:rgba(22,163,74,.22);--chart-normal-text:rgba(22,163,74,.5);--chart-hi-border:rgba(220,38,38,.22);--chart-hi-text:rgba(220,38,38,.5);--chart-gap-fill:rgba(0,0,0,.02);--chart-gap-stripe:rgba(0,0,0,.05);--chart-gap-text:rgba(0,0,0,.15);--chart-insulin-line:rgba(217,119,6,.3);--chart-insulin-fill:rgba(217,119,6,.85);--chart-memo-fill:rgba(124,58,237,.7);--chart-yaxis-bg:#fff;--shadow-sm:0 1px 3px rgba(0,0,0,.06);--shadow-md:0 4px 12px rgba(0,0,0,.08);--font-sans:'Noto Sans JP',sans-serif;--font-mono:'JetBrains Mono',monospace;--radius-sm:6px;--radius-md:10px;--radius-lg:16px;--transition:.2s ease}
-[data-theme="dark"]{--bg-primary:#0a0e17;--bg-card:#1a2235;--bg-card-hover:#1f2a40;--bg-input:#0f1628;--border-color:#2a3550;--text-primary:#e8ecf4;--text-secondary:#8896b0;--text-muted:#5a6a85;--accent-blue:#4a9eff;--accent-blue-dim:rgba(74,158,255,.15);--accent-green:#34d399;--accent-green-dim:rgba(52,211,153,.08);--accent-orange:#f59e0b;--accent-orange-dim:rgba(245,158,11,.15);--accent-red:#ef4444;--accent-red-dim:rgba(239,68,68,.15);--accent-purple:#a78bfa;--accent-purple-dim:rgba(167,139,250,.15);--chart-bg:#1a2235;--chart-grid:rgba(255,255,255,.04);--chart-grid-strong:rgba(255,255,255,.12);--chart-text:rgba(255,255,255,.25);--chart-text-strong:rgba(255,255,255,.4);--chart-glucose:#4a9eff;--chart-normal-fill:rgba(52,211,153,.06);--chart-normal-border:rgba(52,211,153,.2);--chart-normal-text:rgba(52,211,153,.45);--chart-hi-border:rgba(239,68,68,.3);--chart-hi-text:rgba(239,68,68,.45);--chart-gap-fill:rgba(255,255,255,.02);--chart-gap-stripe:rgba(255,255,255,.04);--chart-gap-text:rgba(255,255,255,.15);--chart-insulin-line:rgba(245,158,11,.4);--chart-insulin-fill:rgba(245,158,11,.9);--chart-memo-fill:rgba(167,139,250,.8);--chart-yaxis-bg:#1a2235;--shadow-sm:0 1px 3px rgba(0,0,0,.3);--shadow-md:0 4px 12px rgba(0,0,0,.4)}
+:root{--bg-primary:#f5f6f8;--bg-card:#fff;--bg-card-hover:#f9fafb;--bg-input:#f0f2f5;--border-color:#dfe3ea;--border-focus:#4a9eff;--text-primary:#1a2233;--text-secondary:#5a6678;--text-muted:#8c95a6;--accent-blue:#3b82f6;--accent-blue-dim:rgba(59,130,246,.1);--accent-green:#16a34a;--accent-green-dim:rgba(22,163,74,.08);--accent-orange:#d97706;--accent-orange-dim:rgba(217,119,6,.1);--accent-red:#dc2626;--accent-red-dim:rgba(220,38,38,.08);--accent-purple:#7c3aed;--accent-purple-dim:rgba(124,58,237,.08);--chart-bg:#fff;--chart-grid:rgba(0,0,0,.05);--chart-grid-strong:rgba(0,0,0,.12);--chart-text:rgba(0,0,0,.35);--chart-text-strong:rgba(0,0,0,.55);--chart-glucose:#3b82f6;--chart-normal-fill:rgba(22,163,74,.05);--chart-normal-border:rgba(22,163,74,.22);--chart-normal-text:rgba(22,163,74,.5);--chart-hi-border:rgba(220,38,38,.22);--chart-hi-text:rgba(220,38,38,.5);--chart-insulin-line:rgba(217,119,6,.3);--chart-insulin-fill:rgba(217,119,6,.85);--chart-memo-fill:rgba(124,58,237,.7);--chart-yaxis-bg:#fff;--shadow-sm:0 1px 3px rgba(0,0,0,.06);--shadow-md:0 4px 12px rgba(0,0,0,.08);--font-sans:'Noto Sans JP',sans-serif;--font-mono:'JetBrains Mono',monospace;--radius-sm:6px;--radius-md:10px;--radius-lg:16px;--transition:.2s ease}
+[data-theme="dark"]{--bg-primary:#0a0e17;--bg-card:#1a2235;--bg-card-hover:#1f2a40;--bg-input:#0f1628;--border-color:#2a3550;--text-primary:#e8ecf4;--text-secondary:#8896b0;--text-muted:#5a6a85;--accent-blue:#4a9eff;--accent-blue-dim:rgba(74,158,255,.15);--accent-green:#34d399;--accent-green-dim:rgba(52,211,153,.08);--accent-orange:#f59e0b;--accent-orange-dim:rgba(245,158,11,.15);--accent-red:#ef4444;--accent-red-dim:rgba(239,68,68,.15);--accent-purple:#a78bfa;--accent-purple-dim:rgba(167,139,250,.15);--chart-bg:#1a2235;--chart-grid:rgba(255,255,255,.04);--chart-grid-strong:rgba(255,255,255,.12);--chart-text:rgba(255,255,255,.25);--chart-text-strong:rgba(255,255,255,.4);--chart-glucose:#4a9eff;--chart-normal-fill:rgba(52,211,153,.06);--chart-normal-border:rgba(52,211,153,.2);--chart-normal-text:rgba(52,211,153,.45);--chart-hi-border:rgba(239,68,68,.3);--chart-hi-text:rgba(239,68,68,.45);--chart-insulin-line:rgba(245,158,11,.4);--chart-insulin-fill:rgba(245,158,11,.9);--chart-memo-fill:rgba(167,139,250,.8);--chart-yaxis-bg:#1a2235;--shadow-sm:0 1px 3px rgba(0,0,0,.3);--shadow-md:0 4px 12px rgba(0,0,0,.4)}
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
 html{font-size:15px}body{font-family:var(--font-sans);background:var(--bg-primary);color:var(--text-primary);line-height:1.6;min-height:100vh;-webkit-font-smoothing:antialiased;transition:background .3s,color .3s}
 .app-container{max-width:1200px;margin:0 auto;padding:1.5rem 1rem}
 header{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.5rem;padding-bottom:1rem;border-bottom:1px solid var(--border-color)}
 header h1{font-size:1.4rem;font-weight:600;display:flex;align-items:center;gap:.6rem}
 .header-right{display:flex;align-items:center;gap:.75rem}
-.auth-status{font-size:.75rem;color:var(--text-muted);font-family:var(--font-mono)}
-.auth-status.authenticated{color:var(--accent-green)}
-.theme-toggle{background:var(--bg-input);border:1px solid var(--border-color);width:36px;height:36px;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:1.1rem;transition:all var(--transition)}
-.theme-toggle:hover{border-color:var(--accent-blue)}
+.auth-status{font-size:.75rem;color:var(--text-muted);font-family:var(--font-mono)}.auth-status.authenticated{color:var(--accent-green)}
+.theme-toggle{background:var(--bg-input);border:1px solid var(--border-color);width:36px;height:36px;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:1.1rem;transition:all var(--transition)}.theme-toggle:hover{border-color:var(--accent-blue)}
 .stats-bar{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:.75rem;margin-bottom:1.5rem}
 .stat-card{background:var(--bg-card);border:1px solid var(--border-color);border-radius:var(--radius-md);padding:.9rem 1rem;box-shadow:var(--shadow-sm)}
 .stat-label{font-size:.7rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:.08em;font-weight:500;margin-bottom:.25rem}
@@ -28,12 +26,11 @@ header h1{font-size:1.4rem;font-weight:600;display:flex;align-items:center;gap:.
 .chart-section{background:var(--bg-card);border:1px solid var(--border-color);border-radius:var(--radius-lg);padding:1rem;margin-bottom:1.5rem;box-shadow:var(--shadow-sm)}
 .chart-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:.75rem;flex-wrap:wrap;gap:.5rem}
 .chart-title{font-size:.85rem;font-weight:500;color:var(--text-secondary)}
-.chart-controls{display:flex;gap:.4rem;align-items:center}
+.chart-controls{display:flex;gap:.4rem;align-items:center;flex-wrap:wrap}
 .chart-controls button{background:var(--bg-input);border:1px solid var(--border-color);color:var(--text-secondary);font-family:var(--font-sans);font-size:.75rem;padding:.35rem .7rem;border-radius:var(--radius-sm);cursor:pointer;transition:all var(--transition)}
 .chart-controls button:hover{border-color:var(--accent-blue);color:var(--text-primary)}
 .chart-controls button.active{background:var(--accent-blue-dim);border-color:var(--accent-blue);color:var(--accent-blue)}
-.chart-viewport{position:relative;width:100%;height:400px;overflow:hidden;cursor:grab;border-radius:var(--radius-sm);background:var(--chart-bg);border:1px solid var(--border-color)}
-.chart-viewport:active{cursor:grabbing}
+.chart-viewport{position:relative;width:100%;height:400px;overflow:hidden;cursor:grab;border-radius:var(--radius-sm);background:var(--chart-bg);border:1px solid var(--border-color)}.chart-viewport:active{cursor:grabbing}
 canvas#glucoseChart{display:block;width:100%;height:100%}
 .chart-date-indicator{position:absolute;top:.5rem;left:60px;font-family:var(--font-mono);font-size:.75rem;color:var(--text-muted);z-index:6;pointer-events:none;background:var(--chart-bg);padding:.1rem .4rem;border-radius:3px;opacity:.8}
 .chart-loading{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);color:var(--text-muted);font-size:.85rem;z-index:10}
@@ -43,51 +40,35 @@ canvas#glucoseChart{display:block;width:100%;height:100%}
 .chart-tooltip .tt-memo{color:var(--text-secondary);margin-top:.3rem;font-size:.72rem;line-height:1.4}
 .input-section{margin-bottom:1.5rem}
 .input-tabs{display:flex;gap:.3rem}
-.input-tab{background:var(--bg-card);border:1px solid var(--border-color);border-bottom:none;color:var(--text-secondary);font-family:var(--font-sans);font-size:.8rem;font-weight:500;padding:.5rem 1rem;border-radius:var(--radius-sm) var(--radius-sm) 0 0;cursor:pointer;transition:all var(--transition);position:relative;top:1px}
-.input-tab:hover{color:var(--text-primary)}
+.input-tab{background:var(--bg-card);border:1px solid var(--border-color);border-bottom:none;color:var(--text-secondary);font-family:var(--font-sans);font-size:.8rem;font-weight:500;padding:.5rem 1rem;border-radius:var(--radius-sm) var(--radius-sm) 0 0;cursor:pointer;transition:all var(--transition);position:relative;top:1px}.input-tab:hover{color:var(--text-primary)}
 .input-tab.active{background:var(--bg-card);z-index:1}
-.input-tab[data-tab="glucose"].active{border-bottom:2px solid var(--accent-blue);color:var(--accent-blue)}
 .input-tab[data-tab="insulin"].active{border-bottom:2px solid var(--accent-orange);color:var(--accent-orange)}
 .input-tab[data-tab="memo"].active{border-bottom:2px solid var(--accent-purple);color:var(--accent-purple)}
-.input-tab[data-tab="gap"].active{border-bottom:2px solid var(--text-muted);color:var(--text-muted)}
-.input-panel{display:none;background:var(--bg-card);border:1px solid var(--border-color);border-radius:0 var(--radius-md) var(--radius-md) var(--radius-md);padding:1.2rem;box-shadow:var(--shadow-sm)}
-.input-panel.active{display:block}
+.input-panel{display:none;background:var(--bg-card);border:1px solid var(--border-color);border-radius:0 var(--radius-md) var(--radius-md) var(--radius-md);padding:1.2rem;box-shadow:var(--shadow-sm)}.input-panel.active{display:block}
 .form-row{display:flex;gap:.75rem;align-items:flex-end;flex-wrap:wrap;margin-bottom:.75rem}.form-row:last-child{margin-bottom:0}
-.form-group{display:flex;flex-direction:column;gap:.3rem;flex:1;min-width:140px}
+.form-group{display:flex;flex-direction:column;gap:.3rem;flex:1;min-width:0}
 .form-group label{font-size:.72rem;color:var(--text-muted);font-weight:500;text-transform:uppercase;letter-spacing:.05em}
 .form-group input,.form-group textarea{background:var(--bg-input);border:1px solid var(--border-color);color:var(--text-primary);font-family:var(--font-sans);font-size:.85rem;padding:.55rem .7rem;border-radius:var(--radius-sm);transition:border-color var(--transition);outline:none;width:100%}
 .form-group input:focus,.form-group textarea:focus{border-color:var(--border-focus)}
 .form-group textarea{resize:vertical;min-height:60px}
 .form-group input[type="datetime-local"]{font-family:var(--font-mono);font-size:.8rem}
-.btn{background:var(--accent-blue);color:#fff;border:none;font-family:var(--font-sans);font-size:.8rem;font-weight:500;padding:.55rem 1.2rem;border-radius:var(--radius-sm);cursor:pointer;transition:all var(--transition);white-space:nowrap}
-.btn:hover{filter:brightness(1.1)}.btn:disabled{opacity:.5;cursor:not-allowed}
-.btn-secondary{background:var(--bg-input);border:1px solid var(--border-color);color:var(--text-secondary)}
-.btn-secondary:hover{border-color:var(--text-muted);color:var(--text-primary)}
-.form-hint{font-size:.7rem;color:var(--text-muted);margin-top:.2rem}
-.checkbox-row{display:flex;align-items:center;gap:.5rem;padding:.4rem 0}
-.checkbox-row input[type="checkbox"]{width:16px;height:16px;accent-color:var(--accent-blue)}
-.checkbox-row label{font-size:.8rem;color:var(--text-secondary);cursor:pointer}
+.btn{background:var(--accent-blue);color:#fff;border:none;font-family:var(--font-sans);font-size:.8rem;font-weight:500;padding:.55rem 1.2rem;border-radius:var(--radius-sm);cursor:pointer;transition:all var(--transition);white-space:nowrap;flex-shrink:0}.btn:hover{filter:brightness(1.1)}.btn:disabled{opacity:.5;cursor:not-allowed}
+.btn-secondary{background:var(--bg-input);border:1px solid var(--border-color);color:var(--text-secondary)}.btn-secondary:hover{border-color:var(--text-muted);color:var(--text-primary)}
 .records-section{background:var(--bg-card);border:1px solid var(--border-color);border-radius:var(--radius-lg);padding:1rem;margin-bottom:1.5rem;box-shadow:var(--shadow-sm)}
 .records-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:.75rem}
 .records-title{font-size:.85rem;font-weight:500;color:var(--text-secondary)}
 .record-list{display:flex;flex-direction:column;gap:.4rem;max-height:300px;overflow-y:auto}
-.record-item{display:flex;align-items:center;gap:.75rem;padding:.5rem .6rem;background:var(--bg-input);border-radius:var(--radius-sm);font-size:.8rem;transition:background var(--transition)}
-.record-item:hover{background:var(--bg-card-hover)}
+.record-item{display:flex;align-items:center;gap:.75rem;padding:.5rem .6rem;background:var(--bg-input);border-radius:var(--radius-sm);font-size:.8rem;transition:background var(--transition)}.record-item:hover{background:var(--bg-card-hover)}
 .record-type-badge{font-size:.65rem;font-weight:600;text-transform:uppercase;letter-spacing:.05em;padding:.15rem .5rem;border-radius:3px;white-space:nowrap}
 .record-type-badge.glucose{background:var(--accent-blue-dim);color:var(--accent-blue)}
 .record-type-badge.insulin{background:var(--accent-orange-dim);color:var(--accent-orange)}
 .record-type-badge.memo{background:var(--accent-purple-dim);color:var(--accent-purple)}
-.record-type-badge.gap{background:rgba(0,0,0,.04);color:var(--text-muted)}
-[data-theme="dark"] .record-type-badge.gap{background:rgba(255,255,255,.05)}
 .record-time{font-family:var(--font-mono);font-size:.75rem;color:var(--text-muted);white-space:nowrap}
 .record-value{font-family:var(--font-mono);font-weight:500}
 .record-memo-text{color:var(--text-secondary);font-size:.78rem;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.record-delete{margin-left:auto;background:none;border:none;color:var(--text-muted);cursor:pointer;font-size:.85rem;padding:.2rem;opacity:0;transition:all var(--transition)}
-.record-item:hover .record-delete{opacity:1}.record-delete:hover{color:var(--accent-red)}
 .empty-state{text-align:center;padding:2rem;color:var(--text-muted);font-size:.85rem}
 .setup-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.5);z-index:1000;display:flex;align-items:center;justify-content:center;padding:1rem}
 #permOverlay{z-index:2000}
-
 .setup-overlay.hidden{display:none}
 .setup-box{background:var(--bg-card);border:1px solid var(--border-color);border-radius:var(--radius-lg);padding:2rem;max-width:500px;width:100%;box-shadow:0 8px 32px rgba(0,0,0,.15)}
 .setup-box h2{font-size:1.1rem;font-weight:600;margin-bottom:.5rem}
@@ -98,15 +79,32 @@ canvas#glucoseChart{display:block;width:100%;height:100%}
 .toast.success{border-left:3px solid var(--accent-green)}.toast.error{border-left:3px solid var(--accent-red)}.toast.info{border-left:3px solid var(--accent-blue)}
 @keyframes toastin{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
 ::-webkit-scrollbar{width:6px;height:6px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:var(--border-color);border-radius:3px}
-@media(max-width:600px){html{font-size:14px}.app-container{padding:1rem .5rem}.chart-viewport{height:300px}.stats-bar{grid-template-columns:repeat(2,1fr)}header{flex-direction:column;align-items:flex-start;gap:.5rem}.header-right{align-self:flex-end}.form-row{flex-direction:column}.form-group{min-width:100%}}
-#importText,#importPreview{font-family:var(--font-mono);min-height:140px}
-#importPreview{opacity:.95}
+@media(max-width:600px){
+  html{font-size:14px}
+  .app-container{padding:1rem .5rem}
+  .chart-viewport{height:300px}
+  .stats-bar{grid-template-columns:repeat(2,1fr)}
+  header{flex-direction:column;align-items:flex-start;gap:.5rem}
+  .header-right{align-self:flex-end}
+  .form-row{flex-direction:column;gap:.5rem}
+  .form-group{min-width:0;width:100%}
+  .form-group input[type="datetime-local"]{font-size:.75rem;padding:.5rem}
+  .form-group input[type="number"]{font-size:.85rem;padding:.5rem}
+  .input-panel{padding:.9rem}
+  .input-tabs{flex-wrap:wrap}
+  .input-tab{font-size:.75rem;padding:.4rem .7rem}
+  .btn{width:100%;text-align:center;padding:.6rem}
+  .record-item{gap:.4rem;padding:.4rem;flex-wrap:wrap}
+  .record-time{font-size:.7rem}
+  .chart-controls button{font-size:.7rem;padding:.3rem .5rem}
+  .setup-box{padding:1.5rem 1rem}
+}
 </style>
 </head>
 <body>
 <div class="app-container">
   <header>
-    <h1>　血糖値モニター</h1>
+    <h1>血糖値モニター</h1>
     <div class="header-right">
       <div class="auth-status" id="authStatus">未接続</div>
       <button class="theme-toggle" id="themeToggle" title="テーマ切替">🌙</button>
@@ -126,6 +124,7 @@ canvas#glucoseChart{display:block;width:100%;height:100%}
         <button data-range="24h" class="active">24h</button>
         <button data-range="3d">3日</button>
         <button data-range="7d">7日</button>
+        <button data-range="14d">14日</button>
         <button id="btnGoLatest" title="最新へ">→ 最新</button>
       </div>
     </div>
@@ -138,44 +137,10 @@ canvas#glucoseChart{display:block;width:100%;height:100%}
   </div>
   <div class="input-section">
     <div class="input-tabs">
-      <button class="input-tab active" data-tab="glucose">血糖値</button>
-      <button class="input-tab" data-tab="insulin">投与</button>
+      <button class="input-tab active" data-tab="insulin">投与</button>
       <button class="input-tab" data-tab="memo">メモ</button>
-      <button class="input-tab" data-tab="gap">欠損区間</button>
-      <button class="input-tab" data-tab="import">一括インポート</button>
     </div>
-    <div class="input-panel active" id="panel-glucose">
-      <div class="form-row">
-        <div class="form-group"><label>日時</label><input type="datetime-local" id="glucoseTime" step="60"></div>
-        <div class="form-group" style="max-width:140px"><label>血糖値 (mg/dL)</label><input type="number" id="glucoseValue" placeholder="例: 320" min="0" max="999"></div>
-        <button class="btn" id="btnAddGlucose">記録</button>
-      </div>
-      <div class="checkbox-row"><input type="checkbox" id="glucoseIsHi"><label for="glucoseIsHi">HI (500超) として記録</label></div>
-      <div class="checkbox-row"><input type="checkbox" id="glucoseMinus20"><label for="glucoseMinus20">20分前の数値として記録（手動計測の場合必須）</label></div>
-    </div>
-        <div class="input-panel" id="panel-import">
-      <div class="form-row">
-        <div class="form-group">
-          <label>入力</label>
-          <textarea id="importText" placeholder="2026-02-11 14:24 369
-2026-02-11 15:05 322
-2026-02-12 00:22 HI"></textarea>
-          <div class="form-hint">入力形式: <b>YYYY-MM-DD HH:MM 値</b></div>
-        </div>
-      </div>
-<div class="form-row">
-  <button class="btn btn-secondary" id="btnImportPreview" type="button">検証（プレビュー）</button>
-  <button class="btn" id="btnImportCommit" type="button" disabled>インポート</button>
-</div>
-<div class="form-row">
-        <div class="form-group">
-          <label>プレビュー</label>
-          <textarea id="importPreview" readonly placeholder="解析結果"></textarea>
-          <div class="form-hint" id="importSummary">未解析</div>
-        </div>
-      </div>
-    </div>
-    <div class="input-panel" id="panel-insulin">
+    <div class="input-panel active" id="panel-insulin">
       <div class="form-row">
         <div class="form-group"><label>日時</label><input type="datetime-local" id="insulinTime" step="60"></div>
         <div class="form-group" style="max-width:140px"><label>投与量</label><input type="number" id="insulinDose" placeholder="例: 3" min="0" step="0.5"></div>
@@ -186,14 +151,6 @@ canvas#glucoseChart{display:block;width:100%;height:100%}
       <div class="form-row"><div class="form-group"><label>日時</label><input type="datetime-local" id="memoTime" step="60"></div></div>
       <div class="form-row"><div class="form-group"><label>メモ内容</label><textarea id="memoText" placeholder="食事、体調など自由に記録..."></textarea></div></div>
       <div class="form-row"><button class="btn" id="btnAddMemo">記録</button></div>
-    </div>
-    <div class="input-panel" id="panel-gap">
-      <div class="form-row">
-        <div class="form-group"><label>欠損開始</label><input type="datetime-local" id="gapStart" step="60"></div>
-        <div class="form-group"><label>欠損終了</label><input type="datetime-local" id="gapEnd" step="60"></div>
-        <button class="btn" id="btnAddGap">記録</button>
-      </div>
-      <p class="form-hint">センサーデータの欠損区間を登録します。</p>
     </div>
   </div>
   <div class="records-section">
@@ -211,22 +168,22 @@ canvas#glucoseChart{display:block;width:100%;height:100%}
     <div class="form-group"><label>API Key</label><input type="text" id="cfgApiKey" placeholder="AIzaSy..."></div>
     <div class="form-group"><label>Auth Domain</label><input type="text" id="cfgAuthDomain" placeholder="your-app.firebaseapp.com"></div>
     <div class="form-group"><label>Project ID</label><input type="text" id="cfgProjectId" placeholder="your-app-id"></div>
-    <div style="display:flex;gap:.5rem;margin-top:1rem">
+    <div style="display:flex;gap:.5rem;margin-top:1rem;flex-wrap:wrap">
       <button class="btn" id="btnSaveConfig">接続</button>
       <button class="btn btn-secondary" id="btnSkipConfig">JSONファイルモードで使う</button>
     </div>
-    <p class="form-hint" style="margin-top:.75rem">JSONファイルモードではリポジトリ内のJSONファイルからデータを読み込みます。</p>
+    <p style="font-size:.7rem;color:var(--text-muted);margin-top:.75rem">JSONファイルモードではリポジトリ内のJSONファイルからデータを読み込みます。</p>
   </div>
 </div>
 <div class="setup-overlay hidden" id="permOverlay" aria-hidden="true">
   <div class="setup-box" style="max-width:420px">
     <h2>🔒 権限が必要です</h2>
     <p id="permMessage">データの保存に必要な権限がありません。</p>
-    <p class="form-hint" id="permDetail" style="margin-top:.4rem;display:none"></p>
+    <p style="font-size:.7rem;color:var(--text-muted);margin-top:.4rem;display:none" id="permDetail"></p>
     <div class="form-group" style="margin-top:1rem">
       <label>UID</label>
       <input type="text" id="permUid" readonly>
-      <div class="form-hint" id="permHint">上記のUIDを管理者に共有してください。</div>
+      <div style="font-size:.7rem;color:var(--text-muted);margin-top:.2rem" id="permHint">上記のUIDを管理者に共有してください。</div>
     </div>
     <div style="display:flex;gap:.5rem;justify-content:flex-end;margin-top:1rem">
       <button class="btn btn-secondary" id="btnCopyUid" type="button">UIDをコピー</button>
@@ -239,224 +196,41 @@ canvas#glucoseChart{display:block;width:100%;height:100%}
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
 <script>
-// ========== Firebase設定 ==========
-// 以下にFirebaseの設定を直接記入すれば、起動時に自動接続します。
-// GitHub Pagesで公開する場合、APIキーはFirestoreのセキュリティルールで保護してください。
-// 空のままにすると起動時に設定画面が表示されます。
 const FIREBASE_CONFIG = {
   apiKey: 'AIzaSyDYUoImRESsH8WFOInx0PPbqcn9_go1zt0',
   authDomain: 'dog-bg.firebaseapp.com',
   projectId: 'dog-bg',
 };
-// ==================================
+const GAP_THRESHOLD_MS = 20 * 60 * 1000;
+const APP={mode:null,db:null,auth:null,uid:null,readDenied:false,data:{glucose:[],insulin:[],memo:[]},loadedUntil:Date.now(),chart:{canvas:null,ctx:null,viewport:null,scrollOffset:0,msPerPixel:0,isDragging:false,dragStartX:0,dragStartOffset:0,currentRange:'24h',yMin:40,yMax:520,pT:30,pB:40,pL:55,pR:15,hitTargets:[]}};
+const RANGE_H={'3h':3,'24h':24,'3d':72,'7d':168,'14d':336};
 
-const APP={mode:null,db:null,auth:null,uid:null,readDenied:false,data:{glucose:[],insulin:[],memo:[],gap:[]},loadedUntil:Date.now(),chart:{canvas:null,ctx:null,viewport:null,scrollOffset:0,msPerPixel:0,isDragging:false,dragStartX:0,dragStartOffset:0,currentRange:'24h',yMin:40,yMax:520,pT:30,pB:40,pL:55,pR:15,hitTargets:[]}};
-const RANGE_H={'3h':3,'24h':24,'3d':72,'7d':168};
-
-// Utils
 function toast(m,t='info'){const e=document.createElement('div');e.className='toast '+t;e.textContent=m;document.getElementById('toastContainer').appendChild(e);setTimeout(()=>e.remove(),3500)}
-function isPermissionDenied(err){
-  const code=(err&&(err.code||err.status||err.name))||'';
-  if(code==='permission-denied'||code==='PERMISSION_DENIED')return true;
-  const msg=(err&&err.message)?String(err.message).toLowerCase():'';
-  return msg.includes('permission')&&msg.includes('denied');
-}
-function hidePermissionPopup(){
-  const ov=document.getElementById('permOverlay');
-  if(!ov)return;
-  if(ov.dataset.locked==='1') return; 
-  ov.classList.add('hidden');
-  ov.setAttribute('aria-hidden','true');
-}
-function showPermissionPopup(err, opts={}){
-  const ov=document.getElementById('permOverlay');
-  if(!ov)return;
-  const mode=opts.mode||'write'; // 'write' | 'read'
-  const locked=!!opts.locked;
-
-  ov.dataset.locked = locked ? '1' : '0';
-
-  const uid=APP.uid||'(未取得)';
-  document.getElementById('permUid').value=uid;
-
+function isPermissionDenied(err){const code=(err&&(err.code||err.status||err.name))||'';if(code==='permission-denied'||code==='PERMISSION_DENIED')return true;const msg=(err&&err.message)?String(err.message).toLowerCase():'';return msg.includes('permission')&&msg.includes('denied')}
+function hidePermissionPopup(){const ov=document.getElementById('permOverlay');if(!ov)return;if(ov.dataset.locked==='1')return;ov.classList.add('hidden');ov.setAttribute('aria-hidden','true')}
+function showPermissionPopup(err,opts={}){
+  const ov=document.getElementById('permOverlay');if(!ov)return;
+  const mode=opts.mode||'write';const locked=!!opts.locked;
+  ov.dataset.locked=locked?'1':'0';
+  document.getElementById('permUid').value=APP.uid||'(未取得)';
   const closeBtn=document.getElementById('btnClosePerm');
-  if(closeBtn) closeBtn.style.display = locked ? 'none' : '';
-
+  if(closeBtn)closeBtn.style.display=locked?'none':'';
   const msgEl=document.getElementById('permMessage');
-  const hintEl=document.getElementById('permHint');
-
-  if(mode==='read'){
-    msgEl.textContent='データの読み取りに必要な権限がありません。';
-    if(hintEl) hintEl.textContent='このUIDを管理者に共有してください。';
-  }else{
-    msgEl.textContent='データの保存に必要な権限がありません。';
-    if(hintEl) hintEl.textContent='このUIDを管理者に共有してください。';
-  }
-
+  msgEl.textContent=mode==='read'?'データの読み取りに必要な権限がありません。':'データの保存に必要な権限がありません。';
   const detail=document.getElementById('permDetail');
-  if(detail){
-    const d=(err&&(err.code||err.name||''))+(err&&err.message?(' / '+err.message):'');
-    if(String(d||'').trim()){
-      detail.textContent=d;
-      detail.style.display='block';
-    }else{
-      detail.style.display='none';
-    }
-  }
-  ov.classList.remove('hidden');
-  ov.setAttribute('aria-hidden','false');
+  if(detail){const d=(err&&(err.code||err.name||''))+(err&&err.message?(' / '+err.message):'');if(String(d||'').trim()){detail.textContent=d;detail.style.display='block'}else{detail.style.display='none'}}
+  ov.classList.remove('hidden');ov.setAttribute('aria-hidden','false');
 }
-function handleWriteError(err){
-  console.error(err);
-  if(isPermissionDenied(err)){
-    showPermissionPopup(err,{mode:'write',locked:false});
-    toast('権限がありません（書き込み不可）','error');
-    return true;
-  }
-  toast('保存に失敗: '+((err&&err.message)?err.message:String(err)),'error');
-  return false;
-}
+function handleWriteError(err){console.error(err);if(isPermissionDenied(err)){showPermissionPopup(err,{mode:'write',locked:false});toast('権限がありません（書き込み不可）','error');return true}toast('保存に失敗: '+((err&&err.message)?err.message:String(err)),'error');return false}
 function fmtDT(ts){const d=new Date(ts);return`${String(d.getMonth()+1).padStart(2,'0')}/${String(d.getDate()).padStart(2,'0')} ${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}`}
 function fmtDate(ts){const d=new Date(ts);return`${d.getFullYear()}/${String(d.getMonth()+1).padStart(2,'0')}/${String(d.getDate()).padStart(2,'0')}`}
 function nowISO(){const d=new Date();d.setMinutes(d.getMinutes()-d.getTimezoneOffset());return d.toISOString().slice(0,16)}
 function gDisp(v,hi){return(hi||v>=500)?'HI':String(v)}
 function gColor(v,hi){if(hi||v>=500)return'#dc2626';if(v>=70&&v<=180)return'#16a34a';if(v>180&&v<300)return'#d97706';return'#dc2626'}
-// ====== Bulk Import (glucose) ======
-APP.importer={rows:[],errors:[]};
-
-function parseDateLike(line){
-  const m=line.match(/(\d{4})[\/\-\.\年](\d{1,2})[\/\-\.\月](\d{1,2})/);
-  if(!m) return null;
-  const y=parseInt(m[1],10),mo=parseInt(m[2],10),d=parseInt(m[3],10);
-  if(!y||!mo||!d) return null;
-  return {y,mo,d};
-}
-function parseTimeLike(line){
-  const m=line.match(/(\d{1,2}):(\d{2})/);
-  if(!m) return null;
-  const hh=parseInt(m[1],10),mm=parseInt(m[2],10);
-  if(hh<0||hh>23||mm<0||mm>59) return null;
-  return {hh,mm};
-}
-function parseValueLike(line){
-  const tmp=line
-    .replace(/(\d{4})[\/\-\.\年](\d{1,2})[\/\-\.\月](\d{1,2})/g,' ')
-    .replace(/(\d{1,2}):(\d{2})/g,' ');
-  if(/\bHI\b/i.test(tmp) || /血糖値\s*HI/i.test(line)) return {value:500,isHi:true};
-  const nums=tmp.match(/-?\d{2,3}/g);
-  if(!nums||!nums.length) return null;
-  const v=parseInt(nums[nums.length-1],10);
-  if(!Number.isFinite(v)) return null;
-  return {value:Math.max(0,Math.min(999,v)),isHi:false};
-}
-function buildTimestampFromParts(dateObj,timeObj){
-  const dt=new Date(dateObj.y, dateObj.mo-1, dateObj.d, timeObj.hh, timeObj.mm, 0, 0);
-  return dt.getTime();
-}
-function getImportRef(){
-  const dEl=document.getElementById('importRefDate');
-  const tEl=document.getElementById('importRefTime');
-  const wrap=document.getElementById('importWrapPrevDay')?.checked;
-  const dStr=(dEl&&dEl.value)?dEl.value:null;
-  const tStr=(tEl&&tEl.value)?tEl.value:null;
-  const now=new Date();
-  const refDate = dStr ? new Date(dStr+'T00:00:00') : new Date(now.getFullYear(),now.getMonth(),now.getDate());
-  const refTime = tStr ? tStr : (String(now.getHours()).padStart(2,'0')+':'+String(now.getMinutes()).padStart(2,'0'));
-  const [rh,rm]=refTime.split(':').map(n=>parseInt(n,10));
-  const refMin = (rh*60+rm);
-  return {refDate,refMin,wrap};
-}
-function inferDateForTime(hh,mm,ref){
-  const d=new Date(ref.refDate.getTime());
-  const tMin=hh*60+mm;
-  if(ref.wrap && tMin>ref.refMin) d.setDate(d.getDate()-1);
-  return {y:d.getFullYear(),mo:d.getMonth()+1,d:d.getDate()};
-}
-function parseImportText(text){
-  // Strict format only: YYYY-MM-DD HH:MM VALUE (VALUE = integer or HI)
-  const lines=String(text||'').split(/\r?\n/);
-  const rows=[]; const errors=[];
-  const reLine=/^(\d{4})-(\d{2})-(\d{2})\s+(\d{1,2}):(\d{2})\s+(HI|hi|\d{1,3})\s*$/;
-
-  for(let i=0;i<lines.length;i++){
-    const raw=lines[i];
-    const line=raw.trim();
-    if(!line) continue;
-
-    const m=line.match(reLine);
-    if(!m){
-      errors.push({lineNo:i+1,line:raw,reason:'形式が違う（YYYY-MM-DD HH:MM 値 のみ対応）'});
-      continue;
-    }
-    const yyyy=Number(m[1]), mm=Number(m[2]), dd=Number(m[3]);
-    const hh=Number(m[4]), mi=Number(m[5]);
-    const vRaw=m[6];
-    const isHi=String(vRaw).toUpperCase()==='HI';
-    const value=isHi?500:Number(vRaw);
-
-    if(!(yyyy>=1970 && yyyy<=2100 && mm>=1 && mm<=12 && dd>=1 && dd<=31 && hh>=0 && hh<=23 && mi>=0 && mi<=59)){
-      errors.push({lineNo:i+1,line:raw,reason:'日付/時刻が不正'});
-      continue;
-    }
-    if(!isHi && !(value>=0 && value<=999)){
-      errors.push({lineNo:i+1,line:raw,reason:'値が不正（0〜999 か HI）'});
-      continue;
-    }
-    const ts=new Date(yyyy, mm-1, dd, hh, mi, 0, 0).getTime();
-    rows.push({timestamp:ts,value:value,isHi:isHi,src:raw,lineNo:i+1});
-  }
-
-  // sort & de-dup within pasted data (same minute + same value)
-  rows.sort((a,b)=>a.timestamp-b.timestamp);
-  const uniq=[];
-  const seen=new Set();
-  for(const r of rows){
-    const key=Math.round(r.timestamp/60000)+'|'+(r.isHi?1:0)+'|'+r.value;
-    if(seen.has(key)) continue;
-    seen.add(key);
-    uniq.push(r);
-  }
-  return {rows:uniq,errors};
-}
-
-async function commitImportRows(rows){
-  if(APP.mode!=='firebase'){
-    toast('Firebase接続時のみインポートできます','error');
-    return;
-  }
-  const existing=new Set(APP.data.glucose.map(r=> (Math.round(r.timestamp/60000)+'|'+(r.isHi?1:0)+'|'+r.value) ));
-  const col=APP.db.collection('glucose');
-  const batch=APP.db.batch();
-  const toAdd=[];
-  let skipped=0;
-  for(const r of rows){
-    const key=Math.round(r.timestamp/60000)+'|'+(r.isHi?1:0)+'|'+r.value;
-    if(existing.has(key)){skipped++; continue;}
-    const ref=col.doc();
-    batch.set(ref,{timestamp:r.timestamp,value:r.value,isHi:r.isHi});
-    toAdd.push({...r,id:ref.id});
-  }
-  if(!toAdd.length){
-    toast(skipped?('既存と重複のため追加なし（'+skipped+'件スキップ）'):'追加対象がありません','info');
-    return;
-  }
-  try{
-    await batch.commit();
-    for(const r of toAdd) APP.data.glucose.push(r);
-    APP.data.glucose.sort((a,b)=>a.timestamp-b.timestamp);
-    toast('インポート完了: '+toAdd.length+'件（'+skipped+'件スキップ）','success');
-    refresh();
-  }catch(e){
-    handleWriteError(e);
-  }
-}
-// ==============================
-
 function statCls(v){if(v==null)return'muted';if(v>=70&&v<=180)return'normal';if(v>180&&v<300)return'warning';return'danger'}
 function esc(s){const d=document.createElement('div');d.textContent=s;return d.innerHTML}
 function cv(n){return getComputedStyle(document.documentElement).getPropertyValue(n).trim()}
 
-// Theme
 function initTheme(){
   const s=localStorage.getItem('glucose_theme');
   if(s==='dark'){document.documentElement.setAttribute('data-theme','dark');document.getElementById('themeToggle').textContent='☀️'}
@@ -468,7 +242,6 @@ function initTheme(){
   });
 }
 
-// Firebase
 function loadCfg(){try{return JSON.parse(localStorage.getItem('glucose_monitor_config'))}catch{return null}}
 function saveCfg(c){localStorage.setItem('glucose_monitor_config',JSON.stringify(c))}
 async function initFB(cfg){
@@ -480,106 +253,36 @@ async function initFB(cfg){
   APP.mode='firebase';toast('データベースに接続しました','success');
 }
 function toMs(v){
-  if(v==null) return null;
-  if(typeof v==='number') return v;
-  if(typeof v==='string'){
-    const n=Number(v);
-    if(!Number.isNaN(n)) return n;
-    const d=Date.parse(v);
-    return Number.isNaN(d)?null:d;
-  }
-  if(typeof v.toMillis==='function') return v.toMillis();
-  if(typeof v.seconds==='number') return v.seconds*1000 + Math.floor((v.nanoseconds||0)/1e6);
+  if(v==null)return null;if(typeof v==='number')return v;
+  if(typeof v==='string'){const n=Number(v);if(!Number.isNaN(n))return n;const d=Date.parse(v);return Number.isNaN(d)?null:d}
+  if(typeof v.toMillis==='function')return v.toMillis();
+  if(typeof v.seconds==='number')return v.seconds*1000+Math.floor((v.nanoseconds||0)/1e6);
   return null;
 }
-
 async function loadFBRange(s,e){
   const ld=async(c)=>{
-    const sn=await APP.db.collection(c)
-      .where('timestamp','>=',s)
-      .where('timestamp','<=',e)
-      .orderBy('timestamp','asc')
-      .get();
-    return sn.docs.map(doc=>{
-      const data=doc.data()||{};
-      const out={id:doc.id,...data};
-      const ts=toMs(data.timestamp);
-      if(ts!=null) out.timestamp=ts;
-      if(c==='gap'){
-        const st=toMs(data.startTs),en=toMs(data.endTs);
-        if(st!=null) out.startTs=st;
-        if(en!=null) out.endTs=en;
-        // gapはtimestampをstartTs基準で扱う
-        if(out.startTs!=null) out.timestamp=out.startTs;
-      }
-      // Firestore Timestamp等の混在対策
-      if(out.timestamp==null) out.timestamp=Date.now();
-      return out;
-    });
+    const sn=await APP.db.collection(c).where('timestamp','>=',s).where('timestamp','<=',e).orderBy('timestamp','asc').get();
+    return sn.docs.map(doc=>{const data=doc.data()||{};const out={id:doc.id,...data};const ts=toMs(data.timestamp);if(ts!=null)out.timestamp=ts;if(out.timestamp==null)out.timestamp=Date.now();return out});
   };
-  const[g,i,m,gp]=await Promise.all([ld('glucose'),ld('insulin'),ld('memo'),ld('gap')]);
-  const merge=(a,n)=>{
-    const ids=new Set(a.map(r=>r.id));
-    for(const r of n){
-      if(!ids.has(r.id)) a.push(r);
-    }
-    a.sort((x,y)=>(x.timestamp||0)-(y.timestamp||0));
-  };
-  merge(APP.data.glucose,g);
-  merge(APP.data.insulin,i);
-  merge(APP.data.memo,m);
-  merge(APP.data.gap,gp);
+  const[g,i,m]=await Promise.all([ld('glucose'),ld('insulin'),ld('memo')]);
+  const merge=(a,n)=>{const ids=new Set(a.map(r=>r.id));for(const r of n){if(!ids.has(r.id))a.push(r)}a.sort((x,y)=>(x.timestamp||0)-(y.timestamp||0))};
+  merge(APP.data.glucose,g);merge(APP.data.insulin,i);merge(APP.data.memo,m);
 }
-async function loadJSON(){
-  for(const t of['glucose','insulin','memo','gap']){try{const r=await fetch('data/'+t+'.json');if(r.ok)APP.data[t]=(await r.json()).map(r=>({...r,timestamp:Number(r.timestamp),id:r.id||'j_'+t+'_'+r.timestamp}))}catch{}}
-}
+async function loadJSON(){for(const t of['glucose','insulin','memo']){try{const r=await fetch('data/'+t+'.json');if(r.ok)APP.data[t]=(await r.json()).map(r=>({...r,timestamp:Number(r.timestamp),id:r.id||'j_'+t+'_'+r.timestamp}))}catch{}}}
 async function ensureLoaded(startTs,endTs){
-  if(APP.mode!=='firebase') return;
-  if(APP.readDenied) return;
-  if(!Number.isFinite(startTs)) return;
-  const endCandidate = Number.isFinite(endTs) ? endTs : Date.now();
-  const end = Math.min(endCandidate, APP.loadedUntil);
-  if(startTs < end){
-    try{
-      await loadFBRange(startTs, end);
-      APP.loadedUntil = startTs;
-    }catch(e){
-      console.error(e);
-      if(isPermissionDenied(e)){
-        APP.readDenied = true;
-        showPermissionPopup(e,{mode:'read',locked:true});
-        toast('読み取り権限がありません','error');
-        return;
-      }
-      toast('データ取得に失敗: '+((e&&e.message)?e.message:String(e)),'error');
-      throw e;
-    }
+  if(APP.mode!=='firebase')return;if(APP.readDenied)return;if(!Number.isFinite(startTs))return;
+  const endCandidate=Number.isFinite(endTs)?endTs:Date.now();const end=Math.min(endCandidate,APP.loadedUntil);
+  if(startTs<end){
+    try{await loadFBRange(startTs,end);APP.loadedUntil=startTs}
+    catch(e){console.error(e);if(isPermissionDenied(e)){APP.readDenied=true;showPermissionPopup(e,{mode:'read',locked:true});toast('読み取り権限がありません','error');return}toast('データ取得に失敗: '+((e&&e.message)?e.message:String(e)),'error');throw e}
   }
 }
 async function addDoc(c,d){return(await APP.db.collection(c).add(d)).id}
-async function delDoc(c,id){await APP.db.collection(c).doc(id).delete()}
 async function addRec(type,data){
-  try{
-    if(APP.mode==='firebase')data.id=await addDoc(type,data);
-    else data.id='l_'+Date.now()+'_'+Math.random().toString(36).slice(2,6);
-    APP.data[type].push(data);APP.data[type].sort((a,b)=>a.timestamp-b.timestamp);
-  }catch(e){
-    handleWriteError(e);
-    throw e;
-  }
-}
-async function delRec(type,id){
-  try{
-    if(APP.mode==='firebase')await delDoc(type,id);
-    APP.data[type]=APP.data[type].filter(r=>r.id!==id)
-  }catch(e){
-    handleWriteError(e);
-    throw e;
-  }
+  try{if(APP.mode==='firebase')data.id=await addDoc(type,data);else data.id='l_'+Date.now()+'_'+Math.random().toString(36).slice(2,6);APP.data[type].push(data);APP.data[type].sort((a,b)=>a.timestamp-b.timestamp)}
+  catch(e){handleWriteError(e);throw e}
 }
 
-
-// Stats
 function updateStats(){
   const now=Date.now(),h24=now-86400000;
   const rec=APP.data.glucose.filter(r=>r.timestamp>=h24&&!r.isHi);
@@ -591,99 +294,32 @@ function updateStats(){
   else{set('statLatest','--','muted');document.getElementById('statLatestTime').textContent='--'}
 }
 
-// Chart
-function initChart(){
-  const C=APP.chart;
-  if(C._inited) return;
-  C.canvas=document.getElementById('glucoseChart');
-  C.viewport=document.getElementById('chartViewport');
-  if(!C.canvas||!C.viewport) return;
-  C.ctx=C.canvas.getContext('2d');
-  setupChartEvents();
-  window.addEventListener('resize',handleResize);
-  C._inited=true;
-  handleResize();
-}
-function updateMPP(){
-  const C=APP.chart;
-  const vp=C.viewport||document.getElementById('chartViewport');
-  const vw=(vp&&vp.clientWidth)?vp.clientWidth:800;
-  const dw=Math.max(50, vw-C.pL-C.pR);
-  C.msPerPixel=(RANGE_H[C.currentRange]*3600000)/dw;
-}
-function handleResize(){
-  const C=APP.chart;
-  if(!C.viewport||!C.canvas||!C.ctx) return;
-  const vw=C.viewport.clientWidth||800;
-  const vh=C.viewport.clientHeight||400;
-  const dpr=window.devicePixelRatio||1;
-  C.canvas.width=vw*dpr;
-  C.canvas.height=vh*dpr;
-  C.canvas.style.width=vw+'px';
-  C.canvas.style.height=vh+'px';
-  C.ctx.setTransform(dpr,0,0,dpr,0,0);
-  updateMPP();
-  drawChart();
-}
-function visRange(){
-  const C=APP.chart;
-  const vp=C.viewport||document.getElementById('chartViewport');
-  const vw=(vp&&vp.clientWidth)?vp.clientWidth:800;
-  const dw=Math.max(50, vw-C.pL-C.pR);
-  if(!C.msPerPixel||!Number.isFinite(C.msPerPixel)) C.msPerPixel=(RANGE_H[C.currentRange]*3600000)/dw;
-  const now=Date.now();
-  const right=now-(C.scrollOffset||0);
-  const left=right-dw*C.msPerPixel;
-  return{left,right,dw};
-}
+function initChart(){const C=APP.chart;if(C._inited)return;C.canvas=document.getElementById('glucoseChart');C.viewport=document.getElementById('chartViewport');if(!C.canvas||!C.viewport)return;C.ctx=C.canvas.getContext('2d');setupChartEvents();window.addEventListener('resize',handleResize);C._inited=true;handleResize()}
+function updateMPP(){const C=APP.chart;const vp=C.viewport||document.getElementById('chartViewport');const vw=(vp&&vp.clientWidth)?vp.clientWidth:800;const dw=Math.max(50,vw-C.pL-C.pR);C.msPerPixel=(RANGE_H[C.currentRange]*3600000)/dw}
+function handleResize(){const C=APP.chart;if(!C.viewport||!C.canvas||!C.ctx)return;const vw=C.viewport.clientWidth||800;const vh=C.viewport.clientHeight||400;const dpr=window.devicePixelRatio||1;C.canvas.width=vw*dpr;C.canvas.height=vh*dpr;C.canvas.style.width=vw+'px';C.canvas.style.height=vh+'px';C.ctx.setTransform(dpr,0,0,dpr,0,0);updateMPP();drawChart()}
+function visRange(){const C=APP.chart;const vp=C.viewport||document.getElementById('chartViewport');const vw=(vp&&vp.clientWidth)?vp.clientWidth:800;const dw=Math.max(50,vw-C.pL-C.pR);if(!C.msPerPixel||!Number.isFinite(C.msPerPixel))C.msPerPixel=(RANGE_H[C.currentRange]*3600000)/dw;const now=Date.now();const right=now-(C.scrollOffset||0);const left=right-dw*C.msPerPixel;return{left,right,dw}}
 function tsX(ts){const C=APP.chart,{left,right,dw}=visRange();return C.pL+((ts-left)/(right-left))*dw}
 function valY(v){const C=APP.chart;const vp=C.viewport||document.getElementById('chartViewport');const vh=(vp&&vp.clientHeight)?vp.clientHeight:400;const dh=vh-C.pT-C.pB;return C.pT+dh*(1-(v-C.yMin)/(C.yMax-C.yMin))}
 
 function drawChart(){
-  const C=APP.chart;
-  if(!C.ctx||!C.viewport) return;
-  const vw=C.viewport.clientWidth, vh=C.viewport.clientHeight;
-  if(!vw||!vh) return;
-  const {left,right}=visRange();
-  const ctx=C.ctx;
-  ctx.clearRect(0,0,vw,vh);
-  C.hitTargets=[];
-  drawGrid(ctx,vw,vh,left,right);
-  drawNormal(ctx,vw,vh);
-  drawHiLine(ctx,vw);
-  drawGaps(ctx,vw,vh,left,right);
-  drawGlucose(ctx,left,right);
-  drawInsulin(ctx,vh,left,right);
-  drawMemo(ctx,vh,left,right);
-  drawYAxis(ctx,vw,vh);
-  const di=document.getElementById('chartDateIndicator');
-  if(di) di.textContent=fmtDate(left);
-  const ld=document.getElementById('chartLoading');
-  if(ld) ld.style.display='none';
+  const C=APP.chart;if(!C.ctx||!C.viewport)return;
+  const vw=C.viewport.clientWidth,vh=C.viewport.clientHeight;if(!vw||!vh)return;
+  const{left,right}=visRange();const ctx=C.ctx;
+  ctx.clearRect(0,0,vw,vh);C.hitTargets=[];
+  drawGrid(ctx,vw,vh,left,right);drawNormal(ctx,vw,vh);drawHiLine(ctx,vw);
+  drawGlucose(ctx,left,right);drawInsulin(ctx,vh,left,right);drawMemo(ctx,vh,left,right);drawYAxis(ctx,vw,vh);
+  const di=document.getElementById('chartDateIndicator');if(di)di.textContent=fmtDate(left);
+  const ld=document.getElementById('chartLoading');if(ld)ld.style.display='none';
 }
-
 function drawGrid(ctx,vw,vh,left,right){
-  const C=APP.chart;
-  ctx.strokeStyle=cv('--chart-grid');ctx.lineWidth=1;
+  const C=APP.chart;ctx.strokeStyle=cv('--chart-grid');ctx.lineWidth=1;
   for(let v=50;v<=500;v+=50){const y=valY(v);ctx.beginPath();ctx.moveTo(C.pL,y);ctx.lineTo(vw-C.pR,y);ctx.stroke()}
   const sh=new Date(left);sh.setMinutes(0,0,0);let t=sh.getTime();
   const hrs=RANGE_H[C.currentRange]||24,lbl=hrs<=24?1:hrs<=72?3:hrs<=168?6:12;
-  ctx.textAlign='center';
-  let lastTimeLabelX=-999,lastDateLabelX=-999;
-  const minTimeGap=50,minDateGap=90;
-  while(t<=right){
-    const x=tsX(t);
-    if(x>=C.pL&&x<=vw-C.pR){
-      const d=new Date(t),h=d.getHours();
-      if(h===0){ctx.strokeStyle=cv('--chart-grid-strong');ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(x,C.pT);ctx.lineTo(x,vh-C.pB);ctx.stroke();if(x-lastDateLabelX>minDateGap){ctx.fillStyle=cv('--chart-text-strong');ctx.font='500 11px "Noto Sans JP"';ctx.fillText(fmtDate(t),x,vh-C.pB+28);lastDateLabelX=x}}
-      else{ctx.strokeStyle=cv('--chart-grid');ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(x,C.pT);ctx.lineTo(x,vh-C.pB);ctx.stroke()}
-      if(h%lbl===0&&x-lastTimeLabelX>minTimeGap){ctx.fillStyle=cv('--chart-text');ctx.font='400 10px "JetBrains Mono"';ctx.fillText(String(h).padStart(2,'0')+':00',x,vh-C.pB+14);lastTimeLabelX=x}
-    }
-    t+=3600000;
-  }
+  ctx.textAlign='center';let lastTimeLabelX=-999,lastDateLabelX=-999;const minTimeGap=50,minDateGap=90;
+  while(t<=right){const x=tsX(t);if(x>=C.pL&&x<=vw-C.pR){const d=new Date(t),h=d.getHours();if(h===0){ctx.strokeStyle=cv('--chart-grid-strong');ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(x,C.pT);ctx.lineTo(x,vh-C.pB);ctx.stroke();if(x-lastDateLabelX>minDateGap){ctx.fillStyle=cv('--chart-text-strong');ctx.font='500 11px "Noto Sans JP"';ctx.fillText(fmtDate(t),x,vh-C.pB+28);lastDateLabelX=x}}else{ctx.strokeStyle=cv('--chart-grid');ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(x,C.pT);ctx.lineTo(x,vh-C.pB);ctx.stroke()}if(h%lbl===0&&x-lastTimeLabelX>minTimeGap){ctx.fillStyle=cv('--chart-text');ctx.font='400 10px "JetBrains Mono"';ctx.fillText(String(h).padStart(2,'0')+':00',x,vh-C.pB+14);lastTimeLabelX=x}}t+=3600000}
   ctx.textAlign='start';
 }
-
 function drawNormal(ctx,vw,vh){
   const C=APP.chart,y180=valY(180),y70=valY(70);
   ctx.fillStyle=cv('--chart-normal-fill');ctx.fillRect(C.pL,y180,vw-C.pL-C.pR,y70-y180);
@@ -691,45 +327,25 @@ function drawNormal(ctx,vw,vh){
   ctx.beginPath();ctx.moveTo(C.pL,y180);ctx.lineTo(vw-C.pR,y180);ctx.moveTo(C.pL,y70);ctx.lineTo(vw-C.pR,y70);ctx.stroke();ctx.setLineDash([]);
   ctx.fillStyle=cv('--chart-normal-text');ctx.font='500 10px "Noto Sans JP"';ctx.fillText('正常範囲 70-180',C.pL+6,y180+14);
 }
-
 function drawHiLine(ctx,vw){
   const C=APP.chart,y=valY(500);
   ctx.strokeStyle=cv('--chart-hi-border');ctx.lineWidth=1;ctx.setLineDash([2,4]);
   ctx.beginPath();ctx.moveTo(C.pL,y);ctx.lineTo(vw-C.pR,y);ctx.stroke();ctx.setLineDash([]);
   ctx.fillStyle=cv('--chart-hi-text');ctx.font='600 10px "JetBrains Mono"';ctx.fillText('HI (≥500)',C.pL+6,y-5);
 }
-
-function drawGaps(ctx,vw,vh,left,right){
-  const C=APP.chart;
-  for(const g of APP.data.gap){
-    if(g.endTs<left||g.startTs>right)continue;
-    const x1=Math.max(C.pL,tsX(g.startTs)),x2=Math.min(vw-C.pR,tsX(g.endTs));
-    if(x2<=x1)continue;
-    ctx.fillStyle=cv('--chart-gap-fill');ctx.fillRect(x1,C.pT,x2-x1,vh-C.pT-C.pB);
-    ctx.save();ctx.beginPath();ctx.rect(x1,C.pT,x2-x1,vh-C.pT-C.pB);ctx.clip();
-    ctx.strokeStyle=cv('--chart-gap-stripe');ctx.lineWidth=1;
-    for(let sx=x1-vh;sx<x2+vh;sx+=12){ctx.beginPath();ctx.moveTo(sx,C.pT);ctx.lineTo(sx+vh,vh);ctx.stroke()}
-    ctx.restore();
-    ctx.fillStyle=cv('--chart-gap-text');ctx.font='400 10px "Noto Sans JP"';ctx.textAlign='center';ctx.fillText('欠損',(x1+x2)/2,(C.pT+vh-C.pB)/2);ctx.textAlign='start';
-  }
-}
-
 function buildSegs(data){
-  if(!data.length)return[];const gaps=APP.data.gap,segs=[];let cur=[];
-  for(const p of data){
-    const inG=gaps.some(g=>p.timestamp>=g.startTs&&p.timestamp<=g.endTs);
-    if(inG){if(cur.length){segs.push(cur);cur=[]}continue}
-    if(cur.length){const pr=cur[cur.length-1];if(gaps.some(g=>g.startTs>pr.timestamp&&g.startTs<p.timestamp)){segs.push(cur);cur=[]}}
-    cur.push(p);
+  if(!data.length)return[];
+  const segs=[];let cur=[data[0]];
+  for(let i=1;i<data.length;i++){
+    if(data[i].timestamp-data[i-1].timestamp>GAP_THRESHOLD_MS){segs.push(cur);cur=[data[i]]}
+    else cur.push(data[i]);
   }
   if(cur.length)segs.push(cur);return segs;
 }
-
 function drawGlucose(ctx,left,right){
   const C=APP.chart,margin=(right-left)*.05;
   const vis=APP.data.glucose.filter(r=>r.timestamp>=left-margin&&r.timestamp<=right+margin);
-  if(!vis.length)return;
-  const segs=buildSegs(vis);
+  if(!vis.length)return;const segs=buildSegs(vis);
   for(const seg of segs){
     if(seg.length===1){const p=seg[0],x=tsX(p.timestamp),y=valY(Math.min(p.isHi?500:p.value,500));ctx.fillStyle=cv('--chart-glucose');ctx.beginPath();ctx.arc(x,y,3,0,Math.PI*2);ctx.fill();C.hitTargets.push({type:'glucose',x,y,r:8,data:p});continue}
     ctx.beginPath();ctx.strokeStyle=cv('--chart-glucose');ctx.lineWidth=2.5;ctx.lineJoin='round';ctx.lineCap='round';
@@ -738,78 +354,24 @@ function drawGlucose(ctx,left,right){
     for(const p of seg){if(p.isHi||p.value>=500){const x=tsX(p.timestamp),y=valY(500);ctx.fillStyle='#dc2626';ctx.beginPath();ctx.arc(x,y,4,0,Math.PI*2);ctx.fill();ctx.font='700 9px "JetBrains Mono"';ctx.textAlign='center';ctx.fillText('HI',x,y-8);ctx.textAlign='start'}}
   }
 }
-
 function drawInsulin(ctx,vh,left,right){
-  const C=APP.chart;
-  const vp=C.viewport||document.getElementById('chartViewport');
-  const vw=(vp&&vp.clientWidth)?vp.clientWidth:800;
-
+  const C=APP.chart;const vp=C.viewport||document.getElementById('chartViewport');const vw=(vp&&vp.clientWidth)?vp.clientWidth:800;
   for(const r of APP.data.insulin){
-    if(r.timestamp<left||r.timestamp>right) continue;
-
-    const x=tsX(r.timestamp);
-
-    // dashed time line
-    ctx.strokeStyle=cv('--chart-insulin-line');
-    ctx.lineWidth=1;
-    ctx.setLineDash([3,3]);
-    ctx.beginPath();
-    ctx.moveTo(x,C.pT);
-    ctx.lineTo(x,vh-C.pB);
-    ctx.stroke();
-    ctx.setLineDash([]);
-
-    // dose badge (handles decimals like 2.5)
-    const ds = (Number.isFinite(r.dose) ? (Math.round(r.dose*100)/100).toString() : String(r.dose));
-    ctx.save();
-    ctx.font='700 10px "JetBrains Mono"';
-    const padX=6;
-    const h=16;
-    const tw=ctx.measureText(ds).width;
-    const w=Math.max(18, tw + padX*2);
-
-    // clamp badge so it won't be clipped near chart edges
-    const minCX=C.pL + w/2 + 2;
-    const maxCX=vw - C.pR - w/2 - 2;
-    const cx=Math.min(Math.max(x, minCX), maxCX);
-
-    const y=C.pT + 6;
-    const x0=cx - w/2;
-    const y0=y;
-    const rad=Math.min(8, h/2, w/2);
-
-    ctx.fillStyle=cv('--chart-insulin-fill');
-    ctx.beginPath();
-    ctx.moveTo(x0+rad, y0);
-    ctx.arcTo(x0+w, y0, x0+w, y0+h, rad);
-    ctx.arcTo(x0+w, y0+h, x0, y0+h, rad);
-    ctx.arcTo(x0, y0+h, x0, y0, rad);
-    ctx.arcTo(x0, y0, x0+w, y0, rad);
-    ctx.closePath();
-    ctx.fill();
-
-    ctx.fillStyle='#fff';
-    ctx.textAlign='center';
-    ctx.textBaseline='middle';
-    ctx.fillText(ds, cx, y0 + h/2 + 0.5);
-    ctx.restore();
-
-    // hit target for tooltip
-    C.hitTargets.push({type:'insulin',x:cx,y:y0+h/2,r:Math.max(12, w/2),data:r});
+    if(r.timestamp<left||r.timestamp>right)continue;const x=tsX(r.timestamp);
+    ctx.strokeStyle=cv('--chart-insulin-line');ctx.lineWidth=1;ctx.setLineDash([3,3]);ctx.beginPath();ctx.moveTo(x,C.pT);ctx.lineTo(x,vh-C.pB);ctx.stroke();ctx.setLineDash([]);
+    const ds=(Number.isFinite(r.dose)?(Math.round(r.dose*100)/100).toString():String(r.dose));
+    ctx.save();ctx.font='700 10px "JetBrains Mono"';const padX=6,h=16,tw=ctx.measureText(ds).width,w=Math.max(18,tw+padX*2);
+    const minCX=C.pL+w/2+2,maxCX=vw-C.pR-w/2-2,cx=Math.min(Math.max(x,minCX),maxCX);
+    const y=C.pT+6,x0=cx-w/2,y0=y,rad=Math.min(8,h/2,w/2);
+    ctx.fillStyle=cv('--chart-insulin-fill');ctx.beginPath();ctx.moveTo(x0+rad,y0);ctx.arcTo(x0+w,y0,x0+w,y0+h,rad);ctx.arcTo(x0+w,y0+h,x0,y0+h,rad);ctx.arcTo(x0,y0+h,x0,y0,rad);ctx.arcTo(x0,y0,x0+w,y0,rad);ctx.closePath();ctx.fill();
+    ctx.fillStyle='#fff';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(ds,cx,y0+h/2+0.5);ctx.restore();
+    C.hitTargets.push({type:'insulin',x:cx,y:y0+h/2,r:Math.max(12,w/2),data:r});
   }
 }
-
-
 function drawMemo(ctx,vh,left,right){
   const C=APP.chart;
-  for(const r of APP.data.memo){
-    if(r.timestamp<left||r.timestamp>right)continue;const x=tsX(r.timestamp),my=vh-C.pB-18;
-    ctx.fillStyle=cv('--chart-memo-fill');ctx.beginPath();ctx.arc(x,my,7,0,Math.PI*2);ctx.fill();
-    ctx.fillStyle='#fff';ctx.font='500 9px sans-serif';ctx.textAlign='center';ctx.fillText('✎',x,my+3);ctx.textAlign='start';
-    C.hitTargets.push({type:'memo',x,y:my,r:12,data:r});
-  }
+  for(const r of APP.data.memo){if(r.timestamp<left||r.timestamp>right)continue;const x=tsX(r.timestamp),my=vh-C.pB-18;ctx.fillStyle=cv('--chart-memo-fill');ctx.beginPath();ctx.arc(x,my,7,0,Math.PI*2);ctx.fill();ctx.fillStyle='#fff';ctx.font='500 9px sans-serif';ctx.textAlign='center';ctx.fillText('✎',x,my+3);ctx.textAlign='start';C.hitTargets.push({type:'memo',x,y:my,r:12,data:r})}
 }
-
 function drawYAxis(ctx,vw,vh){
   const C=APP.chart;ctx.fillStyle=cv('--chart-yaxis-bg');ctx.fillRect(0,0,C.pL,vh);
   ctx.fillStyle=cv('--chart-text-strong');ctx.font='400 10px "JetBrains Mono"';ctx.textAlign='right';
@@ -817,24 +379,18 @@ function drawYAxis(ctx,vw,vh){
   ctx.textAlign='start';ctx.strokeStyle=cv('--chart-grid-strong');ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(C.pL,C.pT);ctx.lineTo(C.pL,vh-C.pB);ctx.stroke();
 }
 
-// Chart interaction
 function setupChartEvents(){
   const C=APP.chart,vp=C.viewport;
-  vp.addEventListener('pointerdown',e=>{C.isDragging=true;C.dragStartX=e.clientX;C.dragStartOffset=C.scrollOffset;vp.setPointerCapture(e.pointerId)});
-  vp.addEventListener('pointermove',e=>{
-    if(C.isDragging){const dx=e.clientX-C.dragStartX;C.scrollOffset=Math.max(0,C.dragStartOffset+dx*C.msPerPixel);lazyLoad();drawChart()}
-    else showTT(e);
-  });
+  vp.addEventListener('pointerdown',e=>{if(e.button===2)return;C.isDragging=true;C.dragStartX=e.clientX;C.dragStartOffset=C.scrollOffset;vp.setPointerCapture(e.pointerId)});
+  vp.addEventListener('pointermove',e=>{if(C.isDragging){const dx=e.clientX-C.dragStartX;C.scrollOffset=Math.max(0,C.dragStartOffset+dx*C.msPerPixel);lazyLoad();drawChart()}else showTT(e)});
   vp.addEventListener('pointerup',()=>{C.isDragging=false});
   vp.addEventListener('wheel',e=>{e.preventDefault();C.scrollOffset=Math.max(0,C.scrollOffset-(e.deltaX+e.deltaY)*C.msPerPixel);lazyLoad();drawChart()},{passive:false});
   vp.addEventListener('click',e=>showTT(e));
   vp.addEventListener('pointerleave',()=>{document.getElementById('chartTooltip').style.display='none'});
 }
-
 function showTT(e){
   const C=APP.chart,rect=C.canvas.getBoundingClientRect();
-  const mx=(e.clientX-rect.left)*(C.viewport.clientWidth/rect.width);
-  const my=(e.clientY-rect.top)*(C.viewport.clientHeight/rect.height);
+  const mx=(e.clientX-rect.left)*(C.viewport.clientWidth/rect.width),my=(e.clientY-rect.top)*(C.viewport.clientHeight/rect.height);
   const tt=document.getElementById('chartTooltip');
   let best=null,bd=Infinity;
   for(const h of C.hitTargets){const d=Math.sqrt((mx-h.x)**2+(my-h.y)**2);if(d<h.r&&d<bd){bd=d;best=h}}
@@ -851,182 +407,56 @@ function showTT(e){
 }
 
 let _llt=null;
-function lazyLoad(){
-  if(APP.mode!=='firebase')return;clearTimeout(_llt);
-  _llt=setTimeout(async()=>{const{left}=visRange();const buf=RANGE_H[APP.chart.currentRange]*3600000;const need=left-buf;if(need<APP.loadedUntil){await ensureLoaded(need,APP.loadedUntil);drawChart()}},200);
-}
+function lazyLoad(){if(APP.mode!=='firebase')return;clearTimeout(_llt);_llt=setTimeout(async()=>{const{left}=visRange();const buf=RANGE_H[APP.chart.currentRange]*3600000;const need=left-buf;if(need<APP.loadedUntil){await ensureLoaded(need,APP.loadedUntil);drawChart()}},200)}
 
-// UI Setup
 function setupUI(){
   document.querySelectorAll('.input-tab').forEach(tab=>{tab.addEventListener('click',()=>{document.querySelectorAll('.input-tab').forEach(t=>t.classList.remove('active'));document.querySelectorAll('.input-panel').forEach(p=>p.classList.remove('active'));tab.classList.add('active');document.getElementById('panel-'+tab.dataset.tab).classList.add('active')})});
-  const now=nowISO();['glucoseTime','insulinTime','memoTime','gapStart','gapEnd'].forEach(id=>{document.getElementById(id).value=now});
-  document.getElementById('glucoseIsHi').addEventListener('change',e=>{const v=document.getElementById('glucoseValue');if(e.target.checked){v.value=500;v.disabled=true}else{v.value='';v.disabled=false}});
-  document.getElementById('btnAddGlucose').addEventListener('click',async()=>{
-    let ts=new Date(document.getElementById('glucoseTime').value).getTime();
-    const minus20=document.getElementById('glucoseMinus20')?.checked;
-    if(minus20) ts-=20*60*1000;
-    const hi=document.getElementById('glucoseIsHi').checked;
-    const val=hi?500:parseInt(document.getElementById('glucoseValue').value);
-    if(!ts||(!hi&&(isNaN(val)||val<0))){toast('入力を確認してください','error');return}
-    try{
-      await addRec('glucose',{timestamp:ts,value:val,isHi:hi});
-    }catch(e){return}
-    toast('血糖値を記録しました','success');
-    document.getElementById('glucoseValue').value='';
-    document.getElementById('glucoseIsHi').checked=false;
-    document.getElementById('glucoseValue').disabled=false;
-    if(document.getElementById('glucoseMinus20')) document.getElementById('glucoseMinus20').checked=false;
-    document.getElementById('glucoseTime').value=nowISO();
-    refresh();
-  });
+  const now=nowISO();['insulinTime','memoTime'].forEach(id=>{const el=document.getElementById(id);if(el)el.value=now});
   document.getElementById('btnAddInsulin').addEventListener('click',async()=>{
-    const ts=new Date(document.getElementById('insulinTime').value).getTime();
-    const dose=parseFloat(document.getElementById('insulinDose').value);
+    const ts=new Date(document.getElementById('insulinTime').value).getTime();const dose=parseFloat(document.getElementById('insulinDose').value);
     if(!ts||isNaN(dose)||dose<=0){toast('入力を確認してください','error');return}
-    try{
-      await addRec('insulin',{timestamp:ts,dose});
-    }catch(e){return}
-    toast('投与を記録しました','success');
-    document.getElementById('insulinDose').value='';
-    document.getElementById('insulinTime').value=nowISO();
-    refresh();
+    try{await addRec('insulin',{timestamp:ts,dose})}catch(e){return}
+    toast('投与を記録しました','success');document.getElementById('insulinDose').value='';document.getElementById('insulinTime').value=nowISO();refresh();
   });
   document.getElementById('btnAddMemo').addEventListener('click',async()=>{
-    const ts=new Date(document.getElementById('memoTime').value).getTime();
-    const txt=document.getElementById('memoText').value.trim();
+    const ts=new Date(document.getElementById('memoTime').value).getTime();const txt=document.getElementById('memoText').value.trim();
     if(!ts||!txt){toast('入力を確認してください','error');return}
-    try{
-      await addRec('memo',{timestamp:ts,text:txt});
-    }catch(e){return}
-    toast('メモを記録しました','success');
-    document.getElementById('memoText').value='';
-    document.getElementById('memoTime').value=nowISO();
-    refresh();
-  });
-  document.getElementById('btnAddGap').addEventListener('click',async()=>{
-    const s=new Date(document.getElementById('gapStart').value).getTime();
-    const e=new Date(document.getElementById('gapEnd').value).getTime();
-    if(!s||!e||e<=s){toast('入力を確認してください','error');return}
-    try{
-      await addRec('gap',{timestamp:s,startTs:s,endTs:e});
-    }catch(err){return}
-    toast('欠損区間を設定しました','success');
-    document.getElementById('gapStart').value=nowISO();
-    document.getElementById('gapEnd').value=nowISO();
-    refresh();
+    try{await addRec('memo',{timestamp:ts,text:txt})}catch(e){return}
+    toast('メモを記録しました','success');document.getElementById('memoText').value='';document.getElementById('memoTime').value=nowISO();refresh();
   });
   document.querySelectorAll('.chart-controls button[data-range]').forEach(btn=>{btn.addEventListener('click',async()=>{document.querySelectorAll('.chart-controls button[data-range]').forEach(b=>b.classList.remove('active'));btn.classList.add('active');APP.chart.currentRange=btn.dataset.range;APP.chart.scrollOffset=0;updateMPP();const{left,right}=visRange();await ensureLoaded(left,right);drawChart()})});
   document.getElementById('btnGoLatest').addEventListener('click',()=>{APP.chart.scrollOffset=0;drawChart()});
   document.getElementById('btnRefreshRecords').addEventListener('click',refresh);
   document.getElementById('btnSaveConfig').addEventListener('click',async()=>{const cfg={apiKey:document.getElementById('cfgApiKey').value.trim(),authDomain:document.getElementById('cfgAuthDomain').value.trim(),projectId:document.getElementById('cfgProjectId').value.trim()};if(!cfg.apiKey||!cfg.projectId){toast('API KeyとProject IDは必須','error');return}try{await initFB(cfg);saveCfg(cfg);document.getElementById('setupOverlay').classList.add('hidden');await startApp()}catch(e){toast('接続失敗: '+e.message,'error')}});
   document.getElementById('btnSkipConfig').addEventListener('click',()=>{APP.mode='json';document.getElementById('setupOverlay').classList.add('hidden');document.getElementById('authStatus').textContent='JSONモード (読み取り専用)';hideInputUI();startApp().catch(console.error)});
-
-  
-  // Bulk import UI (strict: YYYY-MM-DD HH:MM 値)
-  const btnPrev=document.getElementById('btnImportPreview');
-  const btnCommit=document.getElementById('btnImportCommit');
-  const txtEl=document.getElementById('importText');
-  const pvEl=document.getElementById('importPreview');
-  const sumEl=document.getElementById('importSummary');
-
-  function renderImportPreview(parsed){
-    APP.importer=parsed;
-    const rows=parsed.rows||[];
-    const errs=parsed.errors||[];
-    if(pvEl){
-      const lines=rows.map(r=>{
-        const d=new Date(r.timestamp);
-        const y=d.getFullYear(),mo=String(d.getMonth()+1).padStart(2,'0'),da=String(d.getDate()).padStart(2,'0');
-        const hh=String(d.getHours()).padStart(2,'0'),mm=String(d.getMinutes()).padStart(2,'0');
-        const v=r.isHi?'HI':String(r.value);
-        return `${y}-${mo}-${da} ${hh}:${mm} ${v}`;
-      });
-      const errLines=errs.map(e=>`# L${e.lineNo}: ${e.reason} :: ${e.line}`);
-      pvEl.value = (lines.concat(errLines)).join('\n');
-    }
-    if(sumEl){
-      sumEl.textContent = `解析: ${rows.length}件 / エラー: ${errs.length}件`;
-    }
-    if(btnCommit){
-      btnCommit.disabled = !(rows.length>0 && errs.length===0);
-    }
-  }
-
-  if(btnPrev){
-    btnPrev.addEventListener('click',()=>{
-      const parsed=parseImportText(txtEl?txtEl.value:'');
-      renderImportPreview(parsed);
-      if(parsed.errors.length){
-        toast('解析エラーがあります（プレビュー末尾を確認）','error');
-      }else{
-        toast('解析しました（プレビュー確認後にインポート）','success');
-      }
-    });
-  }
-  if(btnCommit){
-    btnCommit.addEventListener('click',async()=>{
-      if(!APP.importer||!APP.importer.rows||!APP.importer.rows.length){toast('解析してからインポートしてください','error');return}
-      if(APP.importer.errors&&APP.importer.errors.length){toast('エラー行があるためインポートできません','error');return}
-      await commitImportRows(APP.importer.rows);
-      // keep text for re-import; user can clear manually
-    });
-  }
-
-  // Permission popup
   const permOv=document.getElementById('permOverlay');
   if(permOv){
-    const closeBtn=document.getElementById('btnClosePerm');
-    if(closeBtn) closeBtn.addEventListener('click',hidePermissionPopup);
-    permOv.addEventListener('click',e=>{
-      if(e.target===permOv){
-        if(permOv.dataset.locked!=='1') hidePermissionPopup();
-      }
-    });
-    document.getElementById('btnCopyUid').addEventListener('click',async()=>{
-      const uid=document.getElementById('permUid').value||'';
-      if(!uid)return;
-      try{
-        await navigator.clipboard.writeText(uid);
-        toast('UIDをコピーしました','success');
-      }catch{
-        const inp=document.getElementById('permUid');
-        inp.focus();inp.select();
-        try{document.execCommand('copy');toast('UIDをコピーしました','success')}catch{toast('コピーに失敗しました','error')}
-      }
-    });
-    document.addEventListener('keydown',e=>{if(e.key==='Escape')hidePermissionPopup();});
+    const closeBtn=document.getElementById('btnClosePerm');if(closeBtn)closeBtn.addEventListener('click',hidePermissionPopup);
+    permOv.addEventListener('click',e=>{if(e.target===permOv&&permOv.dataset.locked!=='1')hidePermissionPopup()});
+    document.getElementById('btnCopyUid').addEventListener('click',async()=>{const uid=document.getElementById('permUid').value||'';if(!uid)return;try{await navigator.clipboard.writeText(uid);toast('UIDをコピーしました','success')}catch{const inp=document.getElementById('permUid');inp.focus();inp.select();try{document.execCommand('copy');toast('UIDをコピーしました','success')}catch{toast('コピーに失敗しました','error')}}});
+    document.addEventListener('keydown',e=>{if(e.key==='Escape')hidePermissionPopup()});
   }
 }
-
 function hideInputUI(){document.querySelector('.input-section').style.display='none'}
 function refresh(){updateStats();drawChart();renderList()}
-
 async function startApp(){
-  initChart();
-  const ld=document.getElementById('chartLoading');
-  if(ld) ld.style.display='block';
+  initChart();const ld=document.getElementById('chartLoading');if(ld)ld.style.display='block';
   try{
-    if(APP.mode==='json') await loadJSON();
+    if(APP.mode==='json')await loadJSON();
     if(APP.mode==='firebase'){
-      // 初回ロードの終端を「今」に合わせる（認証に数秒かかっても取りこぼさない）
-      const empty = !APP.data.glucose.length && !APP.data.insulin.length && !APP.data.memo.length && !APP.data.gap.length;
-      if(empty) APP.loadedUntil = Date.now();
-      const {left,right}=visRange();
-      await ensureLoaded(left,right);
-      const now=Date.now();
-      await ensureLoaded(now-86400000, now);
+      const empty=!APP.data.glucose.length&&!APP.data.insulin.length&&!APP.data.memo.length;
+      if(empty)APP.loadedUntil=Date.now();
+      const{left,right}=visRange();await ensureLoaded(left,right);
+      const now=Date.now();await ensureLoaded(now-86400000,now);
     }
-  }catch(e){
-    console.error(e);
-    toast('データ取得に失敗: '+((e&&e.message)?e.message:String(e)),'error');
-  }
+  }catch(e){console.error(e);toast('データ取得に失敗: '+((e&&e.message)?e.message:String(e)),'error')}
   refresh();
 }
-
 function renderList(){
   const list=document.getElementById('recordList'),all=[];
-  APP.data.glucose.forEach(r=>all.push({type:'glucose',...r}));APP.data.insulin.forEach(r=>all.push({type:'insulin',...r}));
-  APP.data.memo.forEach(r=>all.push({type:'memo',...r}));APP.data.gap.forEach(r=>all.push({type:'gap',...r}));
+  APP.data.glucose.forEach(r=>all.push({type:'glucose',...r}));
+  APP.data.insulin.forEach(r=>all.push({type:'insulin',...r}));
+  APP.data.memo.forEach(r=>all.push({type:'memo',...r}));
   all.sort((a,b)=>b.timestamp-a.timestamp);const recent=all.slice(0,50);
   if(!recent.length){list.innerHTML='<div class="empty-state">データがありません</div>';return}
   list.innerHTML=recent.map(r=>{
@@ -1034,30 +464,12 @@ function renderList(){
     if(r.type==='glucose'){b='<span class="record-type-badge glucose">血糖値</span>';const ds=gDisp(r.value,r.isHi);d='<span class="record-value" style="color:'+gColor(r.value,r.isHi)+'">'+ds+'</span>'}
     else if(r.type==='insulin'){b='<span class="record-type-badge insulin">投与</span>';d='<span class="record-value" style="color:var(--accent-orange)">'+r.dose+'</span>'}
     else if(r.type==='memo'){b='<span class="record-type-badge memo">メモ</span>';d='<span class="record-memo-text">'+esc(r.text)+'</span>'}
-    else if(r.type==='gap'){b='<span class="record-type-badge gap">欠損</span>';d='<span class="record-memo-text">'+fmtDT(r.startTs)+' 〜 '+fmtDT(r.endTs)+'</span>'}
-    const delBtn=APP.mode==='json'?'':'<button class="record-delete" onclick="handleDel(\''+r.type+'\',\''+r.id+'\')" title="削除">✕</button>';
-    return '<div class="record-item"><div>'+b+'</div><span class="record-time">'+fmtDT(r.timestamp)+'</span>'+d+delBtn+'</div>'
+    return '<div class="record-item"><div>'+b+'</div><span class="record-time">'+fmtDT(r.timestamp)+'</span>'+d+'</div>'
   }).join('');
 }
-async function handleDel(t,id){if(!confirm('この記録を削除しますか？'))return;try{await delRec(t,id);toast('削除しました','success');refresh()}catch(e){handleWriteError(e)}}
-
 document.addEventListener('DOMContentLoaded',()=>{
-  initTheme();setupUI();
-  // Priority: hardcoded config > localStorage config > show setup
-  const hc=FIREBASE_CONFIG;
-  const cfg=hc.apiKey?hc:loadCfg();
-  
-if(cfg&&cfg.apiKey){
-    initFB(cfg)
-      .then(async()=>{
-        document.getElementById('setupOverlay').classList.add('hidden');
-        await startApp();
-      })
-      .catch(e=>{
-        console.error(e);
-        toast('接続失敗: '+((e&&e.message)?e.message:String(e)),'error');
-      });
-  }
+  initTheme();setupUI();const hc=FIREBASE_CONFIG;const cfg=hc.apiKey?hc:loadCfg();
+  if(cfg&&cfg.apiKey){initFB(cfg).then(async()=>{document.getElementById('setupOverlay').classList.add('hidden');await startApp()}).catch(e=>{console.error(e);toast('接続失敗: '+((e&&e.message)?e.message:String(e)),'error')})}
 });
 </script>
 </body>
