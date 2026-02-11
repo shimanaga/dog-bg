@@ -44,6 +44,7 @@ def fetch_glucose_data() -> list:
     password = get_env("LIBRELINK_PASSWORD")
 
     api = PyLibreLinkUp(email=email, password=password)
+    api.api_url = "https://api-jp.libreview.io"
     api.authenticate()
 
     patients = api.get_patients()
